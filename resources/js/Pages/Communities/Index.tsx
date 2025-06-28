@@ -1,0 +1,36 @@
+import { CommunityCard } from "@/Components/Community.tsx/CommunityCard";
+import FeedableLayout from "@/Layouts/FeedableLayout";
+import { PageProps } from "@/types";
+import { Link, usePage } from "@inertiajs/react";
+import { useEffect, useState } from "react";
+
+export default function IndexCommunities() {
+
+    const { communities } = usePage<PageProps>().props;
+
+    return (
+        <FeedableLayout title=" - Сообщества">
+
+            <section className="grow flex flex-wrap items-start gap-4 min-2xl:max-w-[560px]">
+                <div className="w-full flex justify-between items-center gap-4 max-sm:flex-col">
+                    <div>
+                        <h2 className="font-bold text-2xl">
+                            Сообщества по вашим интересам
+                        </h2>
+                        <p className="text-gray-500 text-sm mt-1">
+                            Присоединяйтесь к сообществам, которые вам интересны
+                        </p>
+                    </div>
+                    <Link href={route('communities.create')} className="bg-indigo-500 hover:bg-indigo-600 transition-colors text-white py-2 px-4 text-sm font-medium rounded-lg">
+                        Создать сообщество
+                    </Link>
+                </div>
+                {
+                    communities && communities.map((community, index) =>
+                        <CommunityCard communityItem={community} key={index} />
+                    )
+                }
+            </section>
+        </FeedableLayout>
+    )
+}
