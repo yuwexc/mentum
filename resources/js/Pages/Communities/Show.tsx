@@ -1,11 +1,16 @@
 import FeedableLayout from "@/Layouts/FeedableLayout";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/Components/ui/sheet";
-import { usePage } from "@inertiajs/react";
+import { Link, usePage } from "@inertiajs/react";
 import { PageProps } from "@/types";
 import { Banner } from "@/Components/Community.tsx/Banner";
 import { Avatar } from "@/Components/Profile/Avatar";
-import { Pencil } from "lucide-react";
+import { Pencil, Settings } from "lucide-react";
 import { AvatarFormUpdate } from "@/Components/Community.tsx/AvatarFormUpdate";
+import { MiniProfile } from "@/Components/FeedableLayoutComponents/MiniProfile";
+import { UserInterests } from "@/Components/FeedableLayoutComponents/UserInterests";
+import { CommunityManagement } from "@/Components/Community.tsx/CommunityManagement";
+import { CommunityContactInfo } from "@/Components/Community.tsx/CommunityContactInfo";
+import CommunityMembersInfo from "@/Components/Community.tsx/CommunityMembersInfo";
 
 export default function ShowCommunity() {
 
@@ -16,6 +21,12 @@ export default function ShowCommunity() {
             <FeedableLayout title=" - Сообщества">
                 <section className="grow flex flex-col items-center justify-center gap-4 bg-white rounded-xl p-4 min-2xl:max-w-[560px]">
                     <p className="text-gray-400">Сообщество не найдено</p>
+                </section>
+                <section className="min-w-[320px] max-w-[320px] max-lg:hidden">
+                    <div className="sticky top-[81px] flex flex-col gap-4">
+                        <MiniProfile />
+                        <UserInterests />
+                    </div>
                 </section>
             </FeedableLayout>
         )
@@ -44,7 +55,12 @@ export default function ShowCommunity() {
                         }
                     </Avatar>
                     <div className="-mt-2">
-                        <h2 className="ml-6 text-2xl font-bold text-gray-900 tracking-tight">{community.community.name}</h2>
+                        <div className="flex items-center gap-3">
+                            <h2 className="ml-6 text-2xl font-bold text-gray-900 tracking-tight">{community.community.name}</h2>
+                            {
+                                community.isMyCommunity && <Link href={route("community.edit", { community: community.community.slug || community.community.id })}><Settings className="text-gray-400" size={16} /></Link>
+                            }
+                        </div>
                         <div className="flex items-center justify-between">
                             <p className="ml-6 text-gray-500 text-sm">
                                 <span className="font-medium text-indigo-500">{community.community.topic.name}</span>
@@ -73,6 +89,14 @@ export default function ShowCommunity() {
                 <article className="flex flex-col items-stretch gap-4 bg-white rounded-xl p-4 min-2xl:max-w-[560px]">
                     <p>Пост</p>
                 </article>
+            </section>
+
+            <section className="min-w-[320px] max-w-[320px] max-lg:hidden">
+                <div className="sticky top-[81px] flex flex-col gap-4">
+                    <CommunityContactInfo community={community.community} />
+                    {community.community.show_members && <CommunityMembersInfo />}
+                    {community.isMyCommunity && <CommunityManagement community={community.community} />}
+                </div>
             </section>
         </FeedableLayout>
     )

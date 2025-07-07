@@ -52,4 +52,14 @@ class UserCommunityRole extends Model
         'created_at',
         'updated_at'
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
+
+    public function community()
+    {
+        return $this->belongsTo(Community::class, 'community_id', 'id');
+    }
 }

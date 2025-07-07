@@ -1,23 +1,21 @@
+import { CommunityManagement } from "@/Components/Community.tsx/CommunityManagement";
 import { MiniProfile } from "@/Components/FeedableLayoutComponents/MiniProfile";
 import { UserInterests } from "@/Components/FeedableLayoutComponents/UserInterests";
-import { Avatar } from "@/Components/Profile/Avatar";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/Components/ui/form";
-import { Input } from "@/Components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/Components/ui/select";
-import { Textarea } from "@/Components/ui/textarea";
 import FeedableLayout from "@/Layouts/FeedableLayout";
 import { PageProps } from "@/types";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { router, usePage } from "@inertiajs/react";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { Link, router, usePage } from "@inertiajs/react";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/Components/ui/form";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/Components/ui/select";
+import { Input } from "@/Components/ui/input";
 import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { Textarea } from "@/Components/ui/textarea";
+import { Globe, Mail, Save, Undo2 } from "lucide-react";
 
-export default function CreateCommunities() {
+export default function EditCommunities() {
 
-    const { topicsList } = usePage<PageProps>().props;
-
-    const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+    const { community } = usePage<PageProps>().props;
 
     const formSchema = z.object({
         name: z.string().trim()
@@ -41,44 +39,61 @@ export default function CreateCommunities() {
             .optional()
             .transform(val => val === "" ? undefined : val),
 
-        avatar: z
-            .instanceof(File, { message: "Аватар обязателен" })
-            .refine((file) => file.size > 0, "Файл не должен быть пустым")
-            .refine(
-                (file) => ["image/jpeg", "image/png"].includes(file.type),
-                "Допускается только JPEG и PNG"
-            ),
+        topic_id: z.string().trim(),
 
-        topic_id: z.string().trim()
+        email: z.string()
+            .trim()
+            .max(100, { message: 'Email должен быть не длиннее 100 символов' })
+            .optional()
             .refine(
-                value => topicsList?.some(t => t.id === value),
-                "Необходимо выбрать тему из списка доступных"
+                (val) => val === undefined || val === "" || z.string().email().safeParse(val).success,
+                { message: 'Неверный формат электронной почты' }
+            )
+            .transform(val => val === "" ? undefined : val),
+
+        website: z.string()
+            .optional()
+            .transform((val) => val?.trim())
+            .refine(
+                (url) => !url || url.startsWith('http://') || url.startsWith('https://'),
+                { message: 'URL должен начинаться с http:// или https://' }
             )
             .refine(
-                (value) => topicsList?.some(topic => topic.id === value) ?? false,
-                () => ({
-                    message: `Тема не найдена`
-                })
+                (url) => {
+                    if (!url) return true;
+                    try {
+                        new URL(url);
+                        return true;
+                    } catch {
+                        return false;
+                    }
+                },
+                { message: 'Некорректный URL (пример: https://example.com)' }
             )
     })
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            name: '',
-            slug: '',
-            description: '',
-            avatar: undefined,
-            topic_id: ''
+            name: community?.community.name,
+            slug: community?.community.slug || '',
+            description: community?.community.description || '',
+            topic_id: community?.community.topic.id,
+            email: community?.community.email || '',
+            website: community?.community.website || ''
         },
     })
 
     const onSubmit = (values: z.infer<typeof formSchema>) => {
         form.clearErrors();
-        router.post(route('communities.store'), {
+        router.post(route('community.update', {
+            community: community?.community.slug || community?.community.id
+        }), {
             ...values,
             slug: values.slug === "" ? null : values.slug,
             description: values.description === "" ? null : values.description,
+            email: values.email === "" ? null : values.email,
+            website: values.website === "" ? null : values.website,
         }, {
             onError: (errors) => {
                 Object.entries(errors).forEach(([field, message]) => {
@@ -91,13 +106,29 @@ export default function CreateCommunities() {
         })
     }
 
+    if (!community) {
+        return (
+            <FeedableLayout title=" - Сообщества">
+                <section className="grow flex flex-col items-center justify-center gap-4 bg-white rounded-xl p-4 min-2xl:max-w-[560px]">
+                    <p className="text-gray-400">Сообщество не найдено</p>
+                </section>
+                <section className="min-w-[320px] max-w-[320px] max-lg:hidden">
+                    <div className="sticky top-[81px] flex flex-col gap-4">
+                        <MiniProfile />
+                        <UserInterests />
+                    </div>
+                </section>
+            </FeedableLayout>
+        )
+    }
+
     return (
-        <FeedableLayout title=" - Создание сообщества">
+        <FeedableLayout title=" - Настройки сообщества">
 
             <section className='grow flex flex-col gap-4 bg-white rounded-xl p-4 min-2xl:max-w-[560px]'>
                 <div className="border-b border-gray-100 pb-4">
-                    <h2 className="text-2xl font-bold text-gray-900">Создать новое сообщество</h2>
-                    <p className="text-gray-500 text-sm mt-1">Объединяйте людей по интересам</p>
+                    <h2 className="text-2xl font-bold text-gray-900">{community.community.name}</h2>
+                    <p className="text-gray-500 text-sm">режим редактирования</p>
                 </div>
 
                 <Form {...form}>
@@ -190,53 +221,6 @@ export default function CreateCommunities() {
 
                             <FormField
                                 control={form.control}
-                                name="avatar"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel className="block text-sm font-medium text-gray-700">
-                                            Аватар
-                                            <span className="ml-1 text-red-500">*</span>
-                                        </FormLabel>
-                                        <div className="mt-1 flex items-center gap-4">
-                                            <div className="relative group">
-                                                <Avatar
-                                                    photo={previewUrl}
-                                                    person={false}
-                                                    className="h-16 w-16"
-                                                />
-                                                {previewUrl && (
-                                                    <div className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity rounded-lg">
-                                                        <svg className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                            <path strokeLinecap="round" strokeWidth="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                                        </svg>
-                                                    </div>
-                                                )}
-                                            </div>
-                                            <label className="cursor-pointer rounded-md bg-white px-3 py-2 text-sm font-medium text-indigo-600 hover:text-indigo-500 border border-indigo-100 hover:border-indigo-200 transition-colors">
-                                                <span>Выбрать файл</span>
-                                                <input
-                                                    type="file"
-                                                    accept="image/*"
-                                                    className="sr-only"
-                                                    onChange={(e) => {
-                                                        const file = e.target.files?.[0];
-                                                        if (file) {
-                                                            const url = URL.createObjectURL(file);
-                                                            setPreviewUrl(url);
-                                                            field.onChange(file);
-                                                        }
-                                                    }}
-                                                />
-                                            </label>
-                                        </div>
-                                        <p className="mt-1 text-xs text-gray-500">Рекомендуемый размер: 256×256px</p>
-                                        <FormMessage className="mt-1 text-sm text-red-600" />
-                                    </FormItem>
-                                )}
-                            />
-
-                            <FormField
-                                control={form.control}
                                 name="topic_id"
                                 render={({ field }) => (
                                     <FormItem>
@@ -251,21 +235,63 @@ export default function CreateCommunities() {
                                                 </SelectTrigger>
                                             </FormControl>
                                             <SelectContent className="rounded-md border-gray-200 bg-white shadow-lg">
-                                                {topicsList?.map((topic) => (
-                                                    <SelectItem
-                                                        key={topic.id}
-                                                        value={topic.id}
-                                                        className="px-4 py-2 hover:bg-indigo-50 transition-colors"
-                                                    >
-                                                        <div className="flex items-center">
-                                                            <span className="w-2 h-2 rounded-full bg-indigo-500 mr-2"></span>
-                                                            {topic.name}
-                                                        </div>
-                                                    </SelectItem>
-                                                ))}
+                                                <SelectItem
+                                                    key={community.community.topic.id}
+                                                    value={community.community.topic.id}
+                                                    className="px-4 py-2 hover:bg-indigo-50 transition-colors"
+                                                >
+                                                    <div className="flex items-center">
+                                                        <span className="w-2 h-2 rounded-full bg-indigo-500 mr-2"></span>
+                                                        {community.community.topic.name}
+                                                    </div>
+                                                </SelectItem>
                                             </SelectContent>
                                         </Select>
                                         <FormMessage className="mt-1 text-sm text-red-600" />
+                                    </FormItem>
+                                )}
+                            />
+
+                            <FormField
+                                control={form.control}
+                                name="email"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel className="block text-sm font-medium text-gray-700">Эл. почта</FormLabel>
+                                        <FormControl>
+                                            <div className="relative mt-1">
+                                                <Input
+                                                    {...field}
+                                                    className="block w-full rounded-md border-gray-300 shadow-sm outline-none transition-all hover:ring-indigo-300 focus:outline-none focus:ring-0 focus:border-transparent"
+                                                />
+                                                <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                                                    <Mail size={18} className="text-gray-400" />
+                                                </div>
+                                            </div>
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+
+                            <FormField
+                                control={form.control}
+                                name="website"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel className="block text-sm font-medium text-gray-700">Cайт</FormLabel>
+                                        <FormControl>
+                                            <div className="relative mt-1">
+                                                <Input
+                                                    {...field}
+                                                    className="block w-full rounded-md border-gray-300 shadow-sm outline-none transition-all hover:ring-indigo-300 focus:outline-none focus:ring-0 focus:border-transparent"
+                                                />
+                                                <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                                                    <Globe size={18} className="text-gray-400" />
+                                                </div>
+                                            </div>
+                                        </FormControl>
+                                        <FormMessage />
                                     </FormItem>
                                 )}
                             />
@@ -276,10 +302,8 @@ export default function CreateCommunities() {
                                 type="submit"
                                 className="inline-flex items-center rounded-md border border-transparent bg-indigo-500 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-600 transition-all"
                             >
-                                <svg className="mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeWidth="2" d="M12 4v16m8-8H4" />
-                                </svg>
-                                Создать сообщество
+                                <Save size={16} className="mr-1" />
+                                <span>Редактировать сообщество</span>
                             </button>
                         </div>
                     </form>
@@ -288,11 +312,18 @@ export default function CreateCommunities() {
 
             <section className="min-w-[320px] max-w-[320px] max-lg:hidden">
                 <div className="sticky top-[81px] flex flex-col gap-4">
-                    <MiniProfile />
-                    <UserInterests />
+                    <article className="w-full bg-white rounded-xl overflow-hidden">
+                        <Link
+                            href={route("community.show", { community: community.community.slug || community.community.id })}
+                            className="flex items-center gap-3 p-4 hover:bg-gray-50 transition-colors duration-150"
+                        >
+                            <Undo2 className="w-4 h-4 text-gray-500" />
+                            <span className="text-gray-700 text-sm">Вернуться на страницу сообщества</span>
+                        </Link>
+                    </article>
+                    <CommunityManagement community={community.community} />
                 </div>
             </section>
-
         </FeedableLayout>
     )
 }

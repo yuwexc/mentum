@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\User\StoreUserInterestRequest;
 use App\Models\Topic;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class UserInterestController extends Controller
@@ -19,16 +20,31 @@ class UserInterestController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
+        $user = auth()->user();
+
+        $page = $request->input('page', 1);
+        $perPage = 10;
+
+        $topics = Topic::paginate($perPage, ['*'], 'page', $page);
+
+        if ($request->wantsJson()) {
+            return response()->json([
+                'data' => $topics->items(),
+                'hasMore' => $topics->hasMorePages(),
+            ]);
+        }
+
         return Inertia::render('UserInterest/Create', [
             'auth' => [
-                'user' => auth()->user()
+                'user' => $user
             ],
             'topics' => [
-                'list' => Topic::paginate(10),
-                'user_interests' => auth()->user()->interests()->get()
-            ]
+                'initial_data' => $topics->items(),
+                'user_interests' => $user->interests
+            ],
+            'errors' => session()->get('errors')?->getBag('default')?->toArray()
         ]);
     }
 

@@ -51,7 +51,10 @@ class Community extends Model
         'description',
         'avatar',
         'banner',
-        'topic_id'
+        'topic_id',
+        'email',
+        'website',
+        'show_members'
     ];
 
     /**
@@ -75,6 +78,18 @@ class Community extends Model
         'is_followed',
         'created_at_formatted'
     ];
+
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'show_members' => 'boolean'
+        ];
+    }
 
     public function getTopicAttribute(): Topic
     {

@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Community\StoreCommunityAvatarRequest;
 use App\Http\Requests\Community\StoreCommunityRequest;
 use App\Http\Requests\Community\StoreCommunityBannerRequest;
+use App\Http\Requests\Community\UpdateCommunityRequest;
 use App\Models\Community;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -49,6 +51,68 @@ class CommunityController extends Controller
         ]);
     }
 
+    public function members(Request $request, Community $community)
+    {
+        $currentUser = auth()->user();
+
+        if ($community->owner()->first()->id != $currentUser->id) {
+            return redirect()->back()->with('error', "Вы не являетесь автором сообщества");
+        }
+
+        $page = $request->input('page', 1);
+        $perPage = 10;
+
+        $members = $community->users()
+            ->withPivot(['id'])
+            ->paginate($perPage, [
+                'users.first_name',
+                'users.last_name',
+                'users.username',
+                'users.birthdate',
+                'users.avatar',
+                'users.created_at',
+                'user_community_roles.id as community_role_id'
+            ], 'page', $page);
+
+        if ($request->wantsJson()) {
+            return response()->json([
+                'members' => $members->items(),
+                'hasMore' => $members->hasMorePages(),
+            ]);
+        }
+
+        return Inertia::render('Communities/Members', [
+            'auth' => [
+                'user' => $currentUser
+            ],
+            'profile' => [
+                'user' => $currentUser,
+                'interests' => $currentUser->interests()->get(),
+                'isMyProfile' => $currentUser->id === Auth::id()
+            ],
+            'community' => [
+                'community' => $community,
+                'isMyCommunity' => $community->owner()->first()->id === Auth::id(),
+                'members' => $members->items()
+            ]
+        ]);
+    }
+
+    public function updateShowMembers(Request $request, Community $community)
+    {
+        $currentUser = auth()->user();
+
+        if ($community->owner()->first()->id != $currentUser->id) {
+            return redirect()->back()->with('error', "Вы не являетесь автором сообщества");
+        }
+
+        $validated = $request->validate([
+            'show_members' => 'required|boolean'
+        ]);
+
+        $community->update($validated);
+    }
+
     public function create()
     {
         $currentUser = auth()->user();
@@ -79,6 +143,40 @@ class CommunityController extends Controller
         $community = Community::create($validated);
 
         return redirect()->route('community.show', ['community' => $community->slug ?: $community->id])->with('success', 'Вы успешно создали сообщество "' . $community->name . '"');
+    }
+
+    /**
+     * Display the user's profile form.
+     */
+    public function edit(Community $community)
+    {
+        $currentUser = auth()->user();
+        if ($community->owner()->first()->id != $currentUser->id) {
+            return redirect()->back()->with('error', "Вы не являетесь автором сообщества");
+        }
+
+        return Inertia::render('Communities/Edit', [
+            'auth' => [
+                'user' => $currentUser
+            ],
+            'community' => [
+                'community' => $community->makeVisible('created_at_formatted'),
+            ]
+        ]);
+    }
+
+    /**
+     * Update the user's profile information.
+     */
+    public function update(UpdateCommunityRequest $request, Community $community)
+    {
+        if ($community->exists()) {
+            $validated = $request->validated();
+            $community->update($validated);
+            return redirect()->route('community.edit', ['community' => $community->slug])->with('success', 'Сообщество успешно обновлено');
+        } else {
+            return redirect()->back()->with('error', "Сообщество не найдено");
+        }
     }
 
     public function updateAvatar(StoreCommunityAvatarRequest $storeCommunityAvatarRequest, Community $community)

@@ -8,8 +8,11 @@ export interface Community {
     avatar: string,
     banner: string | null,
     topic: Topic,
+    email: string | null,
+    website: string | null,
     owner: string,
     followers_count: number,
     is_followed: boolean,
+    show_members: boolean,
     created_at_formatted?: string
 }

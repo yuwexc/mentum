@@ -6,16 +6,18 @@ import { Head, Link, router, usePage } from "@inertiajs/react";
 import { useState } from "react";
 import { Alert, AlertDescription, AlertTitle } from '@/Components/ui/alert';
 import { AlertCircleIcon } from 'lucide-react';
+import axios from 'axios';
+import { toast } from 'sonner';
 
 export default function CreateUserInterest() {
 
-    const { auth, topics: initialTopics, errors } = usePage<PageProps>().props;
+    const { auth, topics, errors } = usePage<PageProps>().props;
 
-    const [selectedTopics, setSelectedTopics] = useState<Topic[]>(initialTopics!.user_interests);
-
-    const [topics, setPosts] = useState(initialTopics?.list.data);
-    const [hasMore, setHasMore] = useState(initialTopics?.list.next_page_url !== null);
-    const [page, setPage] = useState(initialTopics?.list.current_page);
+    const [selectedTopics, setSelectedTopics] = useState<Topic[]>(topics!.user_interests);
+    const [topicsList, setTopicsList] = useState<Topic[]>(topics!.initial_data);
+    const [hasMore, setHasMore] = useState(true);
+    const [nextPage, setNextPage] = useState(2);
+    const [loading, setLoading] = useState(false);
 
     const handleTopicSelect = (topic: Topic) => {
         const isSelected = selectedTopics.some(selected => selected.id === topic.id);
@@ -23,40 +25,41 @@ export default function CreateUserInterest() {
         if (isSelected) {
             setSelectedTopics(selectedTopics.filter(element => element.id !== topic.id));
         } else {
-            if (auth.user.user_feature_subscription.user_interest_count) {
-                if (selectedTopics.length < auth.user.user_feature_subscription.user_interest_count) {
-                    setSelectedTopics([...selectedTopics, topic]);
-                }
-            } else {
+            const maxInterests = auth.user.user_feature_subscription.user_interest_count;
+            if (!maxInterests || selectedTopics.length < maxInterests) {
                 setSelectedTopics([...selectedTopics, topic]);
             }
         }
     };
 
-    const fetchMoreData = () => {
-        if (!hasMore) return;
+    const fetchMoreData = async () => {
+        if (!hasMore || loading) return;
 
-        const nextPage = page! + 1;
+        setLoading(true);
 
-        router.get(`/topics?page=${nextPage}`, {}, {
-            preserveState: true,
-            preserveScroll: true,
-            only: ['topics'],
-            onSuccess: ({ props }) => {
-                setPosts(prev => [...prev!, ...props.topics!.list.data]);
-                setHasMore(props.topics?.list.next_page_url !== null);
-                setPage(nextPage);
-            }
-        });
+        try {
+            const response = await axios.get('/topics', {
+                params: { page: nextPage },
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            });
+
+            setTopicsList([...topicsList, ...response.data.data]);
+            setHasMore(response.data.hasMore);
+            setNextPage(nextPage + 1);
+
+        } catch {
+            toast.error('Ошибка загрузки. Попробуйте позже');
+        } finally {
+            setLoading(false);
+        }
     };
 
     const onSubmit = () => {
         const topic_ids = selectedTopics.map(topic => topic.id);
         console.log(topic_ids);
         router.post(route('user.interests.store'), { topics: topic_ids }, {
-            onError: (error) => {
-                console.log(error);
-
+            onError: () => {
+                toast.error('Ошибка загрузки. Попробуйте позже');
             }
         });
     }
@@ -83,7 +86,7 @@ export default function CreateUserInterest() {
                 </div>
 
                 {
-                    errors.topics &&
+                    errors &&
                     <Alert variant="destructive" className='mb-6 max-sm:mb-4'>
                         <AlertCircleIcon className='stroke-red-400' />
                         <AlertTitle>Обратите внимание!</AlertTitle>
@@ -94,7 +97,7 @@ export default function CreateUserInterest() {
                 }
 
                 <InfiniteScroll
-                    dataLength={topics!.length}
+                    dataLength={topicsList!.length}
                     next={fetchMoreData}
                     hasMore={hasMore}
                     loader={
@@ -105,7 +108,7 @@ export default function CreateUserInterest() {
                 >
 
                     <section className="grid grid-cols-3 max-lg:grid-cols-2 max-sm:grid-cols-[1fr] gap-6 max-sm:gap-4 mb-16">
-                        {topics && topics.map((topic, index) => (
+                        {topicsList.map((topic, index) => (
                             <div key={index}>
                                 <article
                                     className={`bg-white border-2 rounded-xl p-6 max-md:p-4 transition-all duration-300 hover:shadow-md hover:border-indigo-300 cursor-pointer relative overflow-hidden

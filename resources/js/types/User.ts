@@ -27,6 +27,8 @@ export interface User {
     birthdate_formatted: string,
     show_birthdate: boolean,
 
+    community_role_id?: string
+
     created_at: string,
     created_at_formatted: string,
     updated_at: string,

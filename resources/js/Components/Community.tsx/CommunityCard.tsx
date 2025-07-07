@@ -18,18 +18,24 @@ export const CommunityCard = ({ communityItem }: { communityItem: Community }) =
 
         setIsProcessing(true);
         try {
-            const { data } = await axios.post<{ followers_count: number, is_followed: boolean }>(
+            const { data } = await axios.post<{ followers_count: number, is_followed: boolean, error: string }>(
                 `/communities/${community.id}/toggle-subscription`
             );
 
-            setCommunity(prev => ({
-                ...prev,
-                followers_count: data.followers_count,
-                is_followed: data.is_followed
-            }));
+            if (data.error) {
+                toast.error(data.error);
+            } else {
+                setCommunity(prev => ({
+                    ...prev,
+                    followers_count: data.followers_count,
+                    is_followed: data.is_followed
+                }));
+            }
 
-        } catch {
-            toast.error('Произошла ошибка');
+        } catch (error) {
+            if (axios.isAxiosError(error) && error.response) {
+                toast.error(error.response.data.error || 'Произошла ошибка');
+            }
         } finally {
             setIsProcessing(false);
         }

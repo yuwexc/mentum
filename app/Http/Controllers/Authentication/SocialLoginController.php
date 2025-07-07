@@ -29,7 +29,6 @@ class SocialLoginController extends Controller
 
             $googleUser = $socialite->user();
 
-
             $user = User::where('email', $googleUser->email)
                 ->orWhere('google_id', $googleUser->getId());
 

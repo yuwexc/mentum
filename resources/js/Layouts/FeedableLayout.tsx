@@ -1,15 +1,13 @@
 import { ReactNode } from "react";
 import Authenticated from "./AuthenticatedLayout";
 import { Head, usePage } from "@inertiajs/react";
-import { Avatar } from '@/Components/Profile/Avatar';
 import { Link } from '@inertiajs/react';
-import { Banner } from "@/Components/Profile/Banner";
 import { PageProps } from "@/types";
 import { ArrowUpRight, BellRing } from "lucide-react";
 
 export default function FeedableLayout({ children, title }: { children: ReactNode, title: string }) {
 
-    const { auth, profile } = usePage<PageProps>().props;
+    const { auth } = usePage<PageProps>().props;
 
     return (
         <Authenticated>
@@ -52,27 +50,6 @@ export default function FeedableLayout({ children, title }: { children: ReactNod
                     </div>
                 </section>
                 {children}
-                <section className="min-w-[320px] max-w-[320px] max-lg:hidden">
-                    <div className="sticky top-[81px] flex flex-col gap-4">
-                        <article className="w-full bg-white rounded-xl p-4 flex flex-col items-center">
-                            <Banner className="h-20" />
-                            <Avatar photo={auth.user.avatar} className='-mt-8 border-[4px] border-white h-[70px] w-[70px]' />
-                            <p className="font-medium">{auth.user.full_name}</p>
-                            <Link href={`@${auth.user.username}`} className="font-thin text-gray-400 text-xs">@{auth.user.username}</Link>
-                        </article>
-                        <article className="w-full bg-white rounded-xl p-4 flex flex-col items-center gap-2">
-                            <p className="text-gray-500 text-sm self-start">Ваши интересы</p>
-                            <div className='w-full flex flex-wrap gap-2'>
-                                {
-                                    profile && profile.interests && profile.interests.map((interest, index) =>
-                                        <Link href={`/#${interest.code}`} className={'inline-flex items-center rounded-md border text-xs font-semibold transition-colors px-3 py-1 bg-indigo-50 text-indigo-700 border-indigo-100 hover:bg-indigo-100'} key={index}>#{interest.name}</Link>
-                                    )
-                                }
-                                <Link href={route('user.interests.create')} className={'inline-flex items-center rounded-md px-3 py-1 text-xs font-semibold transition-colors text-white bg-indigo-500 hover:bg-indigo-600'}>добавить тему</Link>
-                            </div>
-                        </article>
-                    </div>
-                </section>
             </div>
 
         </Authenticated>

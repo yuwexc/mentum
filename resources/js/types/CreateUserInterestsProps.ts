@@ -1,11 +1,6 @@
-import { Pagination } from "./Pagination";
 import { Topic } from "./Topic";
 
 export interface CreateUserInterestsProps {
-    list: TopicData,
+    initial_data: Topic[]
     user_interests: Topic[]
-}
-
-interface TopicData extends Pagination {
-    data: Topic[]
 }

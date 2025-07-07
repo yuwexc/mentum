@@ -3,25 +3,21 @@
 namespace App\Http\Requests\Community;
 
 use App\Models\Community;
-use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\File;
 
-class StoreCommunityRequest extends FormRequest
+class UpdateCommunityRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return $this->user()->can('create', Community::class);
-    }
+        $communityToUpdate = Community::where('id', $this->route('community')->id)
+            ->orWhere('slug', $this->route('community')->slug)->firstOrFail();
 
-    protected function failedAuthorization()
-    {
-        throw new HttpResponseException(redirect()->back()->with('error', 'Откройте полный доступ ко всем функциям с подпиской!'));
+        return $this->user()->can('update', $communityToUpdate);
     }
 
     /**
@@ -31,6 +27,9 @@ class StoreCommunityRequest extends FormRequest
      */
     public function rules(): array
     {
+        $communityToUpdate = Community::where('id', $this->route('community')->id)
+            ->orWhere('slug', $this->route('community')->slug)->firstOrFail();
+
         return [
             'name' => [
                 'required',
@@ -42,7 +41,7 @@ class StoreCommunityRequest extends FormRequest
             'slug' => [
                 'nullable',
                 'string',
-                'unique:communities,slug',
+                Rule::unique('communities')->ignore($communityToUpdate->id),
                 'max:30',
                 'regex:/^[a-zA-Zа_-]*$/',
             ],
@@ -52,7 +51,7 @@ class StoreCommunityRequest extends FormRequest
                 'max:255',
             ],
             'avatar' => [
-                'required',
+                'nullable',
                 File::types(['jpeg', 'png'])
                     ->min(1)
                     ->max(1024 * 5),
@@ -61,6 +60,22 @@ class StoreCommunityRequest extends FormRequest
                 'required',
                 'string',
                 Rule::exists('topics', 'id'),
+            ],
+            'email' => [
+                'nullable',
+                'email:rfc,dns,filter',
+                'max:100',
+                Rule::unique('communities')->ignore($communityToUpdate->id),
+            ],
+            'website' => [
+                'nullable',
+                'string',
+                'starts_with:http://,https://',
+                'url'
+            ],
+            'show_members' => [
+                'nullable',
+                'boolean'
             ]
         ];
     }
@@ -90,6 +105,12 @@ class StoreCommunityRequest extends FormRequest
 
             'topic_id.required' => 'Необходимо выбрать тему из списка доступных',
             'topic_id.exists' => 'Тема не найдена',
+
+            'email.unique' => 'Сообщество с такой эл. почтой уже существует',
+
+            'website.string' => 'Укажите корректную веб-страницу',
+            'website.starts_with' => 'Адрес сайта должен начинаться с http:// или https://',
+            'website.url' => 'Введите полный URL включая домен (например: https://mysite.ru)'
         ];
     }
 
@@ -101,6 +122,8 @@ class StoreCommunityRequest extends FormRequest
         $this->merge([
             'slug' => $this->slug === '' ? null : $this->slug,
             'description' => $this->description === '' ? null : $this->description,
+            'email' => $this->email === '' ? null : $this->email,
+            'website' => $this->website === '' ? null : $this->website
         ]);
     }
 }

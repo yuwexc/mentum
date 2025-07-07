@@ -1,8 +1,9 @@
 import { CommunityCard } from "@/Components/Community.tsx/CommunityCard";
+import { MiniProfile } from "@/Components/FeedableLayoutComponents/MiniProfile";
+import { UserInterests } from "@/Components/FeedableLayoutComponents/UserInterests";
 import FeedableLayout from "@/Layouts/FeedableLayout";
 import { PageProps } from "@/types";
 import { Link, usePage } from "@inertiajs/react";
-import { useEffect, useState } from "react";
 
 export default function IndexCommunities() {
 
@@ -30,6 +31,13 @@ export default function IndexCommunities() {
                         <CommunityCard communityItem={community} key={index} />
                     )
                 }
+            </section>
+
+            <section className="min-w-[320px] max-w-[320px] max-lg:hidden">
+                <div className="sticky top-[81px] flex flex-col gap-4">
+                    <MiniProfile />
+                    <UserInterests />
+                </div>
             </section>
         </FeedableLayout>
     )
