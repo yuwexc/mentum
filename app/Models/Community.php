@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Number;
 
 class Community extends Model
@@ -159,5 +160,10 @@ class Community extends Model
             'community_id',
             'user_id'
         )->wherePivot('community_role_id', CommunityRole::defaultCommunityRoleID());
+    }
+
+    public function posts(): MorphMany
+    {
+        return $this->morphMany(Post::class, 'owner');
     }
 }

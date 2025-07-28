@@ -25,7 +25,7 @@ export default function MembersCommunities() {
     if (!community) {
         return (
             <FeedableLayout title=" - Сообщества">
-                <section className="grow flex flex-col items-center justify-center gap-4 bg-white rounded-xl p-4 min-2xl:max-w-[560px]">
+                <section className="grow max-w-[768px] flex flex-col items-center justify-center gap-4 bg-white rounded-xl p-4 min-2xl:max-w-[560px]">
                     <p className="text-gray-400">Сообщество не найдено</p>
                 </section>
                 <section className="min-w-[320px] max-w-[320px] max-lg:hidden">
@@ -95,7 +95,7 @@ export default function MembersCommunities() {
 
     return (
         <FeedableLayout title=" - Участники сообщества">
-            <section className='max-h-max grow flex flex-col gap-4 bg-white rounded-xl p-4 min-2xl:max-w-[560px]'>
+            <section className='max-h-max grow max-w-[768px] flex flex-col gap-4 bg-white rounded-xl p-4 min-2xl:max-w-[560px]'>
                 <article className="border-b border-gray-100 pb-4">
                     <h2 className="text-2xl font-bold text-gray-900">{community.community.name}</h2>
                     <p className="text-gray-500 text-sm">участники сообщества</p>

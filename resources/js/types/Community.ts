@@ -14,5 +14,6 @@ export interface Community {
     followers_count: number,
     is_followed: boolean,
     show_members: boolean,
+    is_common_community: boolean,
     created_at_formatted?: string
 }

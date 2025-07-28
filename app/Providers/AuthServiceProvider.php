@@ -3,14 +3,18 @@
 namespace App\Providers;
 
 use App\Models\Community;
+use App\Models\Post;
 use App\Models\User;
 use App\Models\Role;
 use App\Models\UserCommunityRole;
+use App\Models\UserInteraction;
 use App\Models\UserInterest;
 use App\Models\UserSystemRole;
 use App\Policies\CommunityPolicy;
+use App\Policies\PostPolicy;
 use App\Policies\RolePolicy;
 use App\Policies\UserCommunityRolePolicy;
+use App\Policies\UserInteractionPolicy;
 use App\Policies\UserInterestPolicy;
 use App\Policies\UserPolicy;
 use App\Policies\UserSystemRolePolicy;
@@ -27,7 +31,9 @@ class AuthServiceProvider extends ServiceProvider
         UserSystemRole::class => UserSystemRolePolicy::class,
         UserInterest::class => UserInterestPolicy::class,
         Community::class => CommunityPolicy::class,
-        UserCommunityRole::class => UserCommunityRolePolicy::class
+        UserCommunityRole::class => UserCommunityRolePolicy::class,
+        UserInteraction::class => UserInteractionPolicy::class,
+        Post::class => PostPolicy::class
     ];
 
     /**

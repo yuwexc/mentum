@@ -11,10 +11,15 @@ import { UserInterests } from "@/Components/FeedableLayoutComponents/UserInteres
 import { CommunityManagement } from "@/Components/Community.tsx/CommunityManagement";
 import { CommunityContactInfo } from "@/Components/Community.tsx/CommunityContactInfo";
 import CommunityMembersInfo from "@/Components/Community.tsx/CommunityMembersInfo";
+import { useState } from "react";
+import axios from "axios";
+import { toast } from "sonner";
+import { Community } from "@/types/Community";
+import { CreatePostComponent } from "@/Components/Post/CreatePostComponent";
 
 export default function ShowCommunity() {
 
-    const { community } = usePage<PageProps>().props;
+    const { auth, community } = usePage<PageProps>().props;
 
     if (!community) {
         return (
@@ -32,10 +37,42 @@ export default function ShowCommunity() {
         )
     }
 
+    const [communityItem, setCommunity] = useState<Community>(community.community);
+
+    const [isProcessing, setIsProcessing] = useState(false);
+
+    const handleSubscribe = async () => {
+        if (isProcessing) return;
+
+        setIsProcessing(true);
+        try {
+            const { data } = await axios.post<{ followers_count: number, is_followed: boolean, error: string }>(
+                `/communities/${community.community.id}/toggle-subscription`
+            );
+
+            if (data.error) {
+                toast.error(data.error);
+            } else {
+                setCommunity(prev => ({
+                    ...prev,
+                    followers_count: data.followers_count,
+                    is_followed: data.is_followed
+                }));
+            }
+
+        } catch (error) {
+            if (axios.isAxiosError(error) && error.response) {
+                toast.error(error.response.data.error || 'Произошла ошибка');
+            }
+        } finally {
+            setIsProcessing(false);
+        }
+    };
+
     return (
         <FeedableLayout title=" - Сообщества">
 
-            <section className="grow flex flex-col items-stretch gap-4">
+            <section className="grow flex flex-col items-stretch gap-4 max-[426px]:-mx-2 max-[426px]:gap-3 max-w-[768px]">
                 <article className="flex flex-col items-stretch gap-4 bg-white rounded-xl p-4 min-2xl:max-w-[560px]">
                     <Banner photo={community.community.banner} className="h-40" />
                     <Avatar photo={community.community.avatar} person={false} className="-mt-14 ml-6 border-white border-4 relative group h-[80px] w-[80px]">
@@ -60,14 +97,27 @@ export default function ShowCommunity() {
                             {
                                 community.isMyCommunity && <Link href={route("community.edit", { community: community.community.slug || community.community.id })}><Settings className="text-gray-400" size={16} /></Link>
                             }
+                            {
+                                communityItem.owner === auth.user.username ? (
+                                    null
+                                ) : !communityItem.is_followed ? (
+                                    <button disabled={isProcessing} onClick={handleSubscribe} className="ml-auto h-[28px] cursor-pointer bg-indigo-500 hover:bg-indigo-600 text-white py-1 px-4 text-sm font-semibold rounded-lg transition-colors">
+                                        Подписаться
+                                    </button>
+                                ) : (
+                                    <button disabled={isProcessing} onClick={handleSubscribe} className="ml-auto h-[28px] cursor-pointer bg-indigo-50 hover:bg-indigo-100 text-indigo-500 py-1 px-4 text-sm font-semibold rounded-lg transition-colors">
+                                        Отписаться
+                                    </button>
+                                )
+                            }
                         </div>
                         <div className="flex items-center justify-between">
                             <p className="ml-6 text-gray-500 text-sm">
                                 <span className="font-medium text-indigo-500">{community.community.topic.name}</span>
-                                {' • '}{community.community.followers_count} {getSubscribersText(community.community.followers_count)}
+                                {' • '}{communityItem.followers_count} {getSubscribersText(communityItem.followers_count)}
                             </p>
                             {
-                                community.community.created_at_formatted && <p className="text-gray-500 text-sm">с {community.community.created_at_formatted.slice(-4)} г.</p>
+                                community.community.created_at_formatted && <p className="text-gray-500 text-sm max-sm:hidden">с {community.community.created_at_formatted.slice(-4)} г.</p>
                             }
                         </div>
                     </div>
@@ -80,9 +130,7 @@ export default function ShowCommunity() {
                         </div>
                     }
                 </article>
-                <article className="flex flex-col items-stretch gap-4 bg-white rounded-xl p-4 min-2xl:max-w-[560px]">
-                    <p>Создать пост</p>
-                </article>
+                {community.isMyCommunity && <CreatePostComponent owner={community.community.id} owner_type={'community'} />}
                 <article className="flex flex-col items-stretch gap-4 bg-white rounded-xl p-4 min-2xl:max-w-[560px]">
                     <p>Пост</p>
                 </article>

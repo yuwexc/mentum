@@ -21,6 +21,11 @@ export type PageProps<T extends Record<string, unknown> = Record<string, unknown
     communities?: Community[],
     community?: CommunityProps,
 
+    friends?: {
+        list: User[],
+        user: User
+    }
+
     flash?: {
         error?: string;
         success?: string;

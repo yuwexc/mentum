@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Community;
 use App\Models\CommunityRole;
 use App\Models\UserCommunityRole;
+use Gate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -40,14 +41,15 @@ class UserCommunityRoleController extends Controller
         if ($isSubscribed) {
             $user->communities()->detach($community->id);
         } else {
-            if ($user->can('create', UserCommunityRole::class)) {
+            $permission = Gate::inspect('create', [UserCommunityRole::class, $community]);
+            if ($permission->allowed()) {
                 $user->communities()->attach($community->id, [
                     'id' => Str::ulid(),
                     'community_role_id' => CommunityRole::getFollowerCommunityRoleID()
                 ]);
             } else {
                 return response()->json([
-                    'error' => "Лимит подписок: {$user->user_feature_subscription->community_subscription_count} сообществ. Откройте полный доступ с подпиской!"
+                    'error' => $permission->message()
                 ], 422);
             }
         }

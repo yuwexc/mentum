@@ -52,22 +52,20 @@ export default function CommunityMembersInfo() {
         }
     }, [isOpened]);
 
-    useEffect(() => {
-        return () => {
-            setMembers([]);
-            setHasMore(true);
-            setNextPage(1);
-            setLoading(false);
-            setIsOpened(false);
-        }
-    }, []);
-
     return (
         <article className="w-full bg-white rounded-xl overflow-hidden">
             <div className="flex items-center gap-3 p-4 border-b border-gray-100">
                 <Users className="w-4 h-4 text-indigo-500" />
                 <h3 className="font-medium text-gray-800">Подписчики</h3>
-                <Dialog>
+                <Dialog onOpenChange={(open) => {
+                    if (!open) {
+                        setMembers(community.members || []);
+                        setHasMore(true);
+                        setNextPage(1);
+                        setLoading(false);
+                        setIsOpened(false);
+                    }
+                }}>
                     <DialogTrigger className="ml-auto text-sm text-indigo-500" onClick={() => setIsOpened(true)}>посмотреть</DialogTrigger>
                     <DialogContent className="max-h-[80dvh] max-w-[50vw] overflow-y-auto max-lg:max-w-[80vw]">
                         <DialogHeader>
@@ -87,12 +85,10 @@ export default function CommunityMembersInfo() {
                             >
                                 {
                                     members.map((user, index) =>
-                                        <>
-                                            <Link href={`/@${user.username}`} key={index} className="w-fit flex flex-col items-center gap-2">
-                                                <Avatar photo={user.avatar} className="h-16 w-16" />
-                                                <p className="font-medium text-sm">{user.full_name}</p>
-                                            </Link>
-                                        </>
+                                        <Link href={`/@${user.username}`} key={index} className="w-fit flex flex-col items-center gap-2">
+                                            <Avatar photo={user.avatar} className="h-16 w-16" />
+                                            <p className="font-medium text-sm">{user.full_name}</p>
+                                        </Link>
                                     )
                                 }
                             </InfiniteScroll>

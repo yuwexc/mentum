@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\User\UpdateUserRequest;
+use App\Models\CommunityRole;
+use App\Models\InteractionStatus;
 use App\Models\User;
+use App\Models\UserInteraction;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -19,6 +22,19 @@ class ProfileController extends Controller
      */
     public function show(User $user)
     {
+        $followings = $user->communities()->select(['communities.id', 'slug', 'name', 'communities.avatar', 'topic_id'])
+            ->get()->each(function ($community) {
+                $community->is_common_community = auth()->user()
+                    ->communities()
+                    ->where('communities.id', $community->id)
+                    ->wherePivot('community_role_id', '<>', CommunityRole::defaultCommunityRoleID())
+                    ->exists();
+            });
+
+        if (!$user->show_birthdate) {
+            $user->makeHidden('birthdate');
+        }
+
         return Inertia::render('Profile/Index', [
             'auth' => [
                 'user' => auth()->user()
@@ -26,8 +42,50 @@ class ProfileController extends Controller
             'profile' => [
                 'user' => $user->makeVisible('show_birthdate'),
                 'interests' => $user->interests()->get(),
-                'isMyProfile' => auth()->id() === $user->id
-            ],
+                'isMyProfile' => auth()->id() === $user->id,
+                'followings' => [
+                    'list' => $followings->take(3)
+                        ->makeHidden(['owner', 'followers_count', 'is_followed']),
+                    'hasMore' => $followings->count() > 3
+                ],
+                'interaction_status' => auth()->user()->interactionStatus($user),
+                'interactions' => [
+                    'friends' => [
+                        'list' => $user->friends()->take(5),
+                        'hasMore' => $user->friends()->count() > 5
+                    ],
+                    'requests' => $user->requests()->get()->map(function (UserInteraction $interaction): array {
+                        return [
+                            'id' => $interaction->id,
+                            'user' => $interaction->user->makeHidden(['user_feature_subscription', 'user_system_role'])
+                        ];
+                    }),
+                ],
+                'posts' => [
+                    'list' => $user->posts()->get()->sortByDesc('created_at')->values()->take(20)
+                ]
+            ]
+        ]);
+    }
+
+    public function following(Request $request, User $user)
+    {
+        $page = $request->input('page', 1);
+        $perPage = 10;
+
+        $communities = $user->communities()
+            ->withPivot(['id'])
+            ->paginate($perPage, [
+                'communities.id',
+                'slug',
+                'name',
+                'avatar',
+                'topic_id'
+            ], 'page', $page);
+
+        return response()->json([
+            'communities' => $communities->items(),
+            'hasMore' => $communities->hasMorePages(),
         ]);
     }
 
@@ -40,8 +98,6 @@ class ProfileController extends Controller
             'auth' => [
                 'user' => auth()->user()->makeVisible('email')
             ]
-            // 'mustVerifyEmail' => $request->user() instanceof MustVerifyEmail,
-            // 'status' => session('status'),
         ]);
     }
 

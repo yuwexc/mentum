@@ -4,6 +4,7 @@ import { UserInterests } from "@/Components/FeedableLayoutComponents/UserInteres
 import FeedableLayout from "@/Layouts/FeedableLayout";
 import { PageProps } from "@/types";
 import { Link, usePage } from "@inertiajs/react";
+import { Plus } from "lucide-react";
 
 export default function IndexCommunities() {
 
@@ -12,8 +13,8 @@ export default function IndexCommunities() {
     return (
         <FeedableLayout title=" - Сообщества">
 
-            <section className="grow flex flex-wrap items-start gap-4 min-2xl:max-w-[560px]">
-                <div className="w-full flex justify-between items-center gap-4 max-sm:flex-col">
+            <section className="grow max-w-[768px] flex flex-wrap gap-4 min-2xl:max-w-[560px]">
+                <div className="w-full self-start flex justify-between items-center gap-4 max-sm:flex-col">
                     <div>
                         <h2 className="font-bold text-2xl">
                             Сообщества по вашим интересам
@@ -22,8 +23,9 @@ export default function IndexCommunities() {
                             Присоединяйтесь к сообществам, которые вам интересны
                         </p>
                     </div>
-                    <Link href={route('communities.create')} className="bg-indigo-500 hover:bg-indigo-600 transition-colors text-white py-2 px-4 text-sm font-medium rounded-lg">
-                        Создать сообщество
+                    <Link href={route('communities.create')} className="flex items-center gap-2 bg-indigo-500 hover:bg-indigo-600 transition-colors text-white py-2 px-4 text-sm font-medium rounded-lg">
+                        <span>Создать</span>
+                        <Plus size={18} />
                     </Link>
                 </div>
                 {

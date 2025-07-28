@@ -6,7 +6,7 @@ import { z } from "zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "../ui/form";
-import { Loader2Icon, Pencil } from "lucide-react";
+import { Calendar, Globe, Loader2Icon, Pencil, PersonStanding, Save } from "lucide-react";
 import { useState } from "react";
 
 const formSchema = z.object({
@@ -45,38 +45,71 @@ export const Bio = () => {
         });
     };
 
-    if (!isEditing && profile && profile.user.bio) {
+    if (!isEditing && profile && (profile.user.website || profile.user.show_birthdate || profile.user.bio)) {
         return (
-            <article className="w-full bg-white rounded-xl p-6 max-[480px]:p-4">
-                <div className="flex justify-between items-start">
-                    <h3 className="font-bold text-xl text-gray-800 mb-2">Обо мне</h3>
+            <article className="w-full bg-white rounded-xl max-[480px]:p-4">
+                <div className="flex items-center gap-3 pl-6 p-4 border-b border-gray-100 max-[920px]:p-0 max-[920px]:border-0">
+                    <PersonStanding className="w-5 h-5 text-indigo-500" />
+                    <h3 className="font-medium text-gray-800">Обо мне</h3>
+                </div>
+                <div className="space-y-4 p-4">
+                    <div>
+                        <div className="bg-gradient-to-r from-indigo-50 to-purple-50 px-2 py-1 rounded-md">
+                            <p className="text-sm text-indigo-800">{profile.user.bio}</p>
+                        </div>
+                        {
+                            profile.isMyProfile &&
+                            <button
+                                onClick={() => setIsEditing(true)}
+                                className="ml-auto text-indigo-800 text-xs flex items-center gap-1"
+                            >
+                                изменить
+                                <Pencil className="w-[10px] h-[10px] ml-1" />
+                            </button>
+                        }
+                    </div>
                     {
-                        profile.isMyProfile &&
-                        <button
-                            onClick={() => setIsEditing(true)}
-                            className="text-indigo-600 hover:text-indigo-800 text-sm flex items-center gap-1"
-                        >
-                            <Pencil className="w-4 h-4 mr-1" />
-                            Изменить
-                        </button>
+                        profile.user.show_birthdate &&
+                        <div className="flex items-center gap-3" style={{ marginTop: profile.isMyProfile ? '0' : '16px'}}>
+                            <Calendar size={18} className="text-indigo-500" />
+                            <p className="text-sm text-gray-700">
+                                <span className="text-gray-500">Дата рождения: </span>
+                                <span className="font-medium">{profile.user.birthdate_formatted}</span>
+                            </p>
+                        </div>
+                    }
+                    {
+                        profile.user.website && (
+                            <a
+                                href={profile.user.website}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex items-center gap-3 text-sm hover:text-blue-600 transition-colors"
+                            >
+                                <Globe size={18} className="text-indigo-500" />
+                                <span className="text-gray-700">Сайт</span>
+                            </a>
+                        )
                     }
                 </div>
-                <p className="text-gray-600 leading-relaxed">{profile.user.bio}</p>
             </article>
         );
     }
 
     if (profile && profile.isMyProfile) {
         return (
-            <article className="w-full bg-white rounded-xl p-6 max-[480px]:p-4 border-l-4 border-indigo-400">
+            <article className="w-full bg-white rounded-xl">
+                <div className="flex items-center gap-3 pl-6 p-4 border-b border-gray-100 max-[920px]:p-0 max-[920px]:border-0">
+                    <PersonStanding className="w-5 h-5 text-indigo-500" />
+                    <h3 className="font-medium text-gray-800">Обо мне</h3>
+                </div>
                 <Form {...form}>
-                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 p-4">
                         <FormField
                             control={form.control}
                             name="bio"
                             render={({ field }) => (
                                 <FormItem>
-                                    <h3 className="font-bold text-xl text-gray-800 mb-2">Обо мне</h3>
                                     <FormControl>
                                         <Textarea
                                             {...field}
@@ -92,22 +125,14 @@ export const Bio = () => {
                             )}
                         />
                         <div className="flex justify-end space-x-2">
-                            <Button
-                                variant={"outline"}
+                            <button
                                 type="submit"
-                                className="border-0 text-white hover:text-white bg-indigo-500 hover:bg-indigo-600"
+                                className="flex items-center gap-2 rounded-lg text-sm font-medium text-white hover:text-white bg-indigo-500 hover:bg-indigo-600 p-1 px-2"
                                 disabled={form.formState.isSubmitting}
                             >
-                                {
-                                    form.formState.isSubmitting ?
-                                        <>
-                                            <span>Сохранение</span>
-                                            <Loader2Icon className="animate-spin" />
-                                        </>
-                                        :
-                                        <span>Сохранить</span>
-                                }
-                            </Button>
+                                <span>Сохранить</span>
+                                <Save size={16} />
+                            </button>
                         </div>
                     </form>
                 </Form>

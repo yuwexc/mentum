@@ -2,7 +2,7 @@ import { FeatureSubscription } from "./FeatureSubscription";
 import { Role } from "./Role";
 
 export interface User {
-    id: number,
+    id: string,
     first_name: string,
     last_name: string,
     full_name: string,

@@ -42,3 +42,4 @@ Route::middleware(['auth', 'verified', 'mustHaveInterests'])->group(function () 
 require __DIR__ . '/auth.php';
 require __DIR__ . '/user.php';
 require __DIR__ . '/community.php';
+require __DIR__ . '/post.php';

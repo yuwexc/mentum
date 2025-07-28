@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserFeatureSubscriptionController;
+use App\Http\Controllers\UserInteractionController;
 use App\Http\Controllers\UserInterestController;
 use Illuminate\Support\Facades\Redirect;
 
@@ -32,4 +33,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/upgrade', [UserFeatureSubscriptionController::class, 'create'])
         ->name('feature.subscription.create');
 
+    Route::get('/@{user}/following', [ProfileController::class, 'following'])->name('user.following');
+
+    Route::post('/friendship', [UserInteractionController::class, 'toggle'])->name('user.friendship.toggle');
+
+    Route::post('/friendship/accept', [UserInteractionController::class, 'accept'])->name('user.friendship.accept');
+
+    Route::get('/friends', [UserInteractionController::class, 'friends'])->name('user.friends');
 });

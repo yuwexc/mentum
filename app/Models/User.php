@@ -4,9 +4,11 @@ namespace App\Models;
 
 use App\Notifications\VerifyEmailNotification;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -250,7 +252,7 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return Community::whereIn('topic_id', $this->interests()->pluck('topics.id'))
             ->get()
-            ->sortByDesc('followers_count');
+            ->sortByDesc('followers_count')->values();
     }
 
     public function communities(): BelongsToMany
@@ -268,5 +270,121 @@ class User extends Authenticatable implements MustVerifyEmail
         $ownerRoleId = CommunityRole::where('code', 'owner')->value('id');
 
         return $this->communities()->wherePivot('community_role_id', $ownerRoleId);
+    }
+
+    public function interactions()
+    {
+        return $this->belongsToMany(
+            User::class,
+            'user_interactions',
+            'user_id',
+            'interacted_user'
+        );
+    }
+
+    public function interactionsReturned()
+    {
+        return $this->belongsToMany(
+            User::class,
+            'user_interactions',
+            'interacted_user',
+            'user_id'
+        );
+    }
+
+    public function friends()
+    {
+        $friends = collect();
+
+        if (
+            UserInteraction::where(
+                'interaction_status_id',
+                InteractionStatus::getFollowedInteractionStatusID()
+            )->where('interacted_user', $this->id)->exists()
+        ) {
+
+            $friends = $friends->merge(
+                $this->interactionsReturned()
+                    ->wherePivot(
+                        'interaction_status_id',
+                        InteractionStatus::getFollowedInteractionStatusID()
+                    )
+                    ->wherePivot(
+                        'interacted_user',
+                        $this->id
+                    )
+                    ->get()
+                    ->map(function ($user) {
+                        return $user->makeHidden(['user_system_role', 'user_feature_subscription']);
+                    })
+            );
+        }
+
+        if (
+            UserInteraction::where(
+                'interaction_status_id',
+                InteractionStatus::getFollowedInteractionStatusID()
+            )->where('user_id', $this->id)->exists()
+        ) {
+
+            $friends = $friends->merge(
+                $this->interactions()
+                    ->wherePivot(
+                        'interaction_status_id',
+                        InteractionStatus::getFollowedInteractionStatusID()
+                    )
+                    ->wherePivot(
+                        'user_id',
+                        $this->id
+                    )
+                    ->get()
+                    ->map(function ($user) {
+                        return $user->makeHidden(['user_system_role', 'user_feature_subscription']);
+                    })
+            );
+        }
+
+        return $friends;
+    }
+
+    public function requests()
+    {
+        return UserInteraction::query()
+            ->where('interacted_user', $this->id)
+            ->where('interaction_status_id', InteractionStatus::getRequestedInteractionStatusID())
+            ->with(['user:id,first_name,last_name,username,avatar,birthdate,created_at']);
+    }
+
+    public function interactionStatus(User $interacted_user)
+    {
+        if (
+            $interaction = UserInteraction::where(
+                function ($query) use ($interacted_user) {
+                    $query->where('interacted_user', $interacted_user->id)
+                        ->orWhere('interacted_user', auth()->id());
+                }
+            )
+                ->where(
+                    function ($query) use ($interacted_user) {
+                        $query->where('user_id', auth()->id())
+                            ->orWhere('user_id', $interacted_user->id);
+                    }
+                )
+                ->first()
+        ) {
+
+            return [
+                'id' => $interaction->id,
+                'code' => $interaction->status()->first()->code,
+                'initiator_id' => $interaction->initiator_id
+            ];
+        } else {
+            return null;
+        }
+    }
+
+    public function posts(): MorphMany
+    {
+        return $this->morphMany(Post::class, 'owner');
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Models\Community;
 use App\Models\CommunityRole;
 use App\Models\User;
 use App\Models\UserCommunityRole;
@@ -28,7 +29,7 @@ class UserCommunityRolePolicy
     /**
      * Determine whether the user can create models.
      */
-    public function create(User $user): bool
+    public function create(User $user, Community $community)
     {
         $communities = $user->communities()
             ->where('community_role_id', CommunityRole::getFollowerCommunityRoleID())
@@ -37,10 +38,16 @@ class UserCommunityRolePolicy
         $limit = $user->user_feature_subscription->community_subscription_count ?? PHP_INT_MAX;
 
         if ($communities == $limit) {
-            return false;
+            return Response::deny("Лимит подписок: {$user->user_feature_subscription->community_subscription_count} сообществ. Откройте полный доступ с подпиской!", 422);
         }
 
-        return true;
+        $topics = $user->interests()->pluck('topics.id')->toArray();
+
+        if (!in_array($community->topic->id, $topics)) {
+            return Response::deny("Вы можете подписаться на сообщества только по своим интересам. Откройте полный доступ с подпиской!", 422);
+        }
+
+        return Response::allow();
     }
 
     /**

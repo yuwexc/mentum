@@ -246,7 +246,7 @@ export default function Authenticated({ children }: { children: ReactNode }) {
 
             <main className="py-4">{children}</main>
 
-            <Toaster richColors expand duration={2500} />
+            <Toaster richColors expand duration={3000} />
         </div>
     );
 }

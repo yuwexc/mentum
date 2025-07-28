@@ -43,7 +43,7 @@ export const CommunityCard = ({ communityItem }: { communityItem: Community }) =
 
 
     return (
-        <article className="flex flex-col gap-3 bg-white rounded-xl p-4 min-w-[180px] max-w-[312px] flex-1 shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden group">
+        <article className="flex flex-col gap-3 bg-white rounded-xl p-4 min-w-[231px] max-w-[384px] flex-1 shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden group">
             <div className="self-center mb-2">
                 <div className="h-[100px] w-[100px] rounded-full bg-gradient-to-r from-blue-400 to-purple-500 p-[2px]">
                     <Avatar

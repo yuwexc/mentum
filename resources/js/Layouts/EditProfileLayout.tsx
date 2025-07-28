@@ -1,7 +1,7 @@
 import { NavLinkEditProfile } from '@/Components/NavLinkEditProfile';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
-import { CircleUserRound, KeyRound, Lock, Star, Trash2 } from 'lucide-react';
+import { CircleUserRound, KeyRound, Lock, Rss, Star, Trash2 } from 'lucide-react';
 import { ReactNode } from 'react';
 
 export default function EditProfileLayout({ children }: { children: ReactNode }) {
@@ -29,14 +29,14 @@ export default function EditProfileLayout({ children }: { children: ReactNode })
                             <Lock size={18} strokeWidth={1} />
                             <span>Приватность</span>
                         </NavLinkEditProfile>
-                        <p className='text-sm text-gray-500 px-2 mt-2 font-semibold'>Безопасность</p>
-                        <NavLinkEditProfile
+                        {/* <p className='text-sm text-gray-500 px-2 mt-2 font-semibold'>Безопасность</p> */}
+                        {/* <NavLinkEditProfile
                             href={'/'}
                             active={false}
                         >
                             <KeyRound size={18} strokeWidth={1} />
                             <span>Пароль</span>
-                        </NavLinkEditProfile>
+                        </NavLinkEditProfile> */}
                         <p className='text-sm text-gray-500 px-2 mt-2 font-semibold'>Аккаунт</p>
                         <NavLinkEditProfile
                             href={route('feature.subscription.create')}
@@ -45,13 +45,20 @@ export default function EditProfileLayout({ children }: { children: ReactNode })
                             <Star size={18} strokeWidth={1} />
                             <span>Моя подписка</span>
                         </NavLinkEditProfile>
-                        <NavLinkEditProfile
+                        {/* <NavLinkEditProfile
+                            href={'/'}
+                            active={false}
+                        >
+                            <Rss size={18} strokeWidth={1} />
+                            <span>Внешние сервисы</span>
+                        </NavLinkEditProfile> */}
+                        {/* <NavLinkEditProfile
                             href={'/'}
                             active={false}
                         >
                             <Trash2 size={18} strokeWidth={1} />
                             <span>Удалить аккаунт</span>
-                        </NavLinkEditProfile>
+                        </NavLinkEditProfile> */}
                     </div>
                 </nav>
                 {children}
