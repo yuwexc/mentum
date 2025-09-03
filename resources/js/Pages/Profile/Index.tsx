@@ -4,7 +4,7 @@ import { Banner } from "@/Components/Profile/Banner";
 import { PageProps } from "@/types";
 import { Avatar } from "@/Components/Profile/Avatar";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/Components/ui/sheet";
-import { Calendar, Globe, Pencil, PlusIcon, Settings } from "lucide-react";
+import { Calendar, Globe, MessageCircle, Pencil, PlusIcon, Settings } from "lucide-react";
 import { AvatarFormUpdate } from "@/Components/Profile/AvatarFormUpdate";
 import { Bio } from "@/Components/Profile/Bio";
 import { Skeleton } from "@/Components/ui/skeleton";
@@ -12,7 +12,7 @@ import { Badge } from "@/Components/ui/badge";
 import { Following } from "@/Components/Profile/Following";
 import { Interactions } from "@/Components/Profile/Interactions";
 import { MakeInteraction } from "@/Components/Profile/MakeInteraction";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { User } from "@/types/User";
 import { CreatePostComponent } from "@/Components/Post/CreatePostComponent";
 import { PostItem } from "@/Components/Post/Post";
@@ -20,6 +20,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import axios from "axios";
 import { toast } from "sonner";
 import { Post } from "@/types/Post";
+import { NoPost } from "@/Components/Post/NoPost";
 
 export default function IndexProfile() {
 
@@ -37,29 +38,58 @@ export default function IndexProfile() {
 
     const [requests, setRequests] = useState<{ id: string, user: User }[]>(profile.interactions ? profile.interactions.requests : []);
 
-    const [postItems, setPostItems] = useState<Post[]>(profile.posts.list);
+    const [postItems, setPostItems] = useState<Post[]>([]);
 
     const [hasMore, setHasMore] = useState(true);
-    const [nextPage, setNextPage] = useState(2);
+    const [nextPage, setNextPage] = useState(1);
     const [loading, setLoading] = useState(false);
 
+    const [showNoPost, setShowNoPost] = useState<boolean>(false);
+
+    useEffect(() => {
+        fetchInitialPosts();
+    }, [profile?.user.username]);
+
+    const fetchInitialPosts = async () => {
+        if (!profile?.user.username) return;
+
+        try {
+            const response = await axios.get(`/posts`, {
+                params: {
+                    page: 1,
+                    owner: profile.user.username
+                }
+            });
+
+            setPostItems(response.data.posts);
+            setHasMore(response.data.hasMore);
+            setNextPage(2);
+
+            if (postItems.length == 0) {
+                setShowNoPost(true);
+            }
+
+        } catch {
+            toast.error('Ошибка загрузки постов');
+        }
+    };
+
     const fetchMoreData = async () => {
-        if (!hasMore || loading) return;
+        if (!hasMore || loading || !profile?.user.username) return;
 
         setLoading(true);
 
         try {
             const response = await axios.get(`/posts`, {
-                params: { 
+                params: {
                     page: nextPage,
-                    username: profile.user.username
-                 },
-                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                    owner: profile.user.username
+                }
             });
 
-            setPostItems([...postItems, ...response.data.posts])
+            setPostItems(prev => [...prev, ...response.data.posts]);
             setHasMore(response.data.hasMore);
-            setNextPage(nextPage + 1);
+            setNextPage(prev => prev + 1);
 
         } catch {
             toast.error('Ошибка загрузки. Попробуйте позже');
@@ -108,10 +138,15 @@ export default function IndexProfile() {
                                                     profile.isMyProfile ?
                                                         <Link href={route('profile.edit')}><Settings className="text-gray-400 mb-1" size={16} /></Link>
                                                         :
-                                                        <MakeInteraction
-                                                            setFriends={setFriends}
-                                                            setRequests={setRequests}
-                                                        />
+                                                        <div className="ml-auto flex items-center gap-2">
+                                                            <Link href={route('chats')} className="mb-2 flex justify-center items-center h-8 w-8 rounded-full bg-indigo-50 hover:bg-indigo-100 transition-colors text-indigo-500">
+                                                                <MessageCircle strokeWidth={1.25} className="h-5 w-5" />
+                                                            </Link>
+                                                            <MakeInteraction
+                                                                setFriends={setFriends}
+                                                                setRequests={setRequests}
+                                                            />
+                                                        </div>
                                                 }
                                             </div>
                                             <div className="flex flex-wrap gap-2 w-fit max-[480px]:hidden">
@@ -211,8 +246,11 @@ export default function IndexProfile() {
                             setRequests={setRequests}
                         />
                         <section className="grow flex flex-col gap-4">
-                            {profile.isMyProfile && <CreatePostComponent owner={profile.user.id} owner_type={'user'} />}
-
+                            {profile.isMyProfile && <CreatePostComponent setPostItems={setPostItems} owner={profile.user.id} owner_type={'user'} />}
+                            {postItems.length == 0 && showNoPost && <NoPost
+                                is_owner={profile.isMyProfile || false}
+                                owner_type={'user'}
+                            />}
                             <InfiniteScroll
                                 className="flex flex-col gap-4"
                                 dataLength={postItems.length}
@@ -226,7 +264,11 @@ export default function IndexProfile() {
                             >
                                 {
                                     postItems.map((post, index) =>
-                                        <PostItem post={post} key={index} />
+                                        <PostItem
+                                            post={post}
+                                            setPostItems={setPostItems}
+                                            current_user_is_owner={profile.isMyProfile || false}
+                                            key={index} />
                                     )
                                 }
                             </InfiniteScroll>

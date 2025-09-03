@@ -1,3 +1,4 @@
+import { CommentInterface } from "./Comment";
 import { Community } from "./Community";
 import { CommunityProps } from "./CommunityProps";
 import { CreateUserInterestsProps } from "./CreateUserInterestsProps";
@@ -30,5 +31,7 @@ export type PageProps<T extends Record<string, unknown> = Record<string, unknown
         error?: string;
         success?: string;
         info?: string
-    }
+    },
+
+    comment?: CommentInterface
 };

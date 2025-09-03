@@ -39,6 +39,9 @@ class AppServiceProvider extends ServiceProvider
         Relation::enforceMorphMap([
             'user' => 'App\Models\User',
             'community' => 'App\Models\Community',
+            'post' => 'App\Models\Post',
+            'comment' => 'App\Models\Comment',
+            'like' => 'App\Models\Like'
         ]);
     }
 }

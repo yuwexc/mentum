@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\Comment;
 use App\Models\Community;
 use App\Models\Post;
 use App\Models\User;
@@ -10,6 +11,7 @@ use App\Models\UserCommunityRole;
 use App\Models\UserInteraction;
 use App\Models\UserInterest;
 use App\Models\UserSystemRole;
+use App\Policies\CommentPolicy;
 use App\Policies\CommunityPolicy;
 use App\Policies\PostPolicy;
 use App\Policies\RolePolicy;
@@ -33,7 +35,8 @@ class AuthServiceProvider extends ServiceProvider
         Community::class => CommunityPolicy::class,
         UserCommunityRole::class => UserCommunityRolePolicy::class,
         UserInteraction::class => UserInteractionPolicy::class,
-        Post::class => PostPolicy::class
+        Post::class => PostPolicy::class,
+        Comment::class => CommentPolicy::class
     ];
 
     /**

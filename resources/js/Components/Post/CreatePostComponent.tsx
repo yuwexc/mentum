@@ -5,12 +5,20 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { router } from "@inertiajs/react";
+import { Post } from "@/types/Post";
+import axios from "axios";
+import { toast } from "sonner";
 
 const formSchema = z.object({
     content: z.string().trim().min(1, { message: "Заполните поле" }),
 });
 
-export const CreatePostComponent = ({ owner, owner_type }: { owner: string, owner_type: string }) => {
+export const CreatePostComponent = ({ owner, owner_type, setPostItems }:
+    {
+        owner: string,
+        owner_type: string,
+        setPostItems: React.Dispatch<React.SetStateAction<Post[]>>
+    }) => {
 
     const [wannaCreate, setWannaCreate] = useState<boolean>(false);
 
@@ -23,26 +31,35 @@ export const CreatePostComponent = ({ owner, owner_type }: { owner: string, owne
         shouldFocusError: true,
     });
 
-    const onSubmit: SubmitHandler<z.infer<typeof formSchema>> = (data) => {
-        form.clearErrors();
-        router.post(route('post.store'), {
-            ...data,
-            owner_id: owner,
-            owner_type: owner_type
-        }, {
-            onSuccess: () => {
-                form.setValue('content', '');
-                setWannaCreate(false);
-            },
-            onError: (errors) => {
-                Object.entries(errors).forEach(([field, message]) => {
+    const onSubmit: SubmitHandler<z.infer<typeof formSchema>> = async (data) => {
+
+        try {
+            form.clearErrors();
+
+            const response = await axios.post(route('post.store'), {
+                ...data,
+                owner_id: owner,
+                owner_type: owner_type
+            });
+
+            form.setValue('content', '');
+            setPostItems(prev => [response.data.post, ...prev]);
+            setWannaCreate(false);
+
+            toast.success(response.data.message);
+
+        } catch (error: any) {
+            if (error.response?.data?.errors) {
+                Object.entries(error.response.data.errors).forEach(([field, message]) => {
                     form.setError(field as keyof z.infer<typeof formSchema>, {
                         type: "server",
-                        message: message as string,
+                        message: (message as string[])[0],
                     });
                 });
-            },
-        });
+            } else {
+                toast.error('Ошибка при создании поста');
+            }
+        }
     };
 
     if (wannaCreate) {

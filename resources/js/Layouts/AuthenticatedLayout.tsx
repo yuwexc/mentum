@@ -5,6 +5,7 @@ import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { Toaster } from '@/Components/ui/sonner';
 import { PageProps } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
+import { MessageCircle } from 'lucide-react';
 import { ReactNode, useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
@@ -73,16 +74,19 @@ export default function Authenticated({ children }: { children: ReactNode }) {
                                 >
                                     Челленджи
                                 </NavLink>
-                                {/* <Link
-                                    className="inline-flex items-center justify-center self-center rounded-full h-[35px] text-white bg-indigo-500 aspect-square"
-                                    href={'#'}
-                                    active={'#'}>
-                                    +
-                                </Link> */}
+
                             </div>
                         </div>
 
-                        <div className="hidden sm:ms-6 sm:flex sm:items-center">
+                        <div className="hidden sm:ms-6 sm:flex sm:items-center gap-4">
+                            <Link
+                                href={route('chats')}
+                                className='flex items-center gap-2 text-sm text-gray-500 font-medium'
+                            >
+                                Чаты
+                                <MessageCircle strokeWidth={1.35} className="h-5 w-5" />
+                            </Link>
+
                             <div className="relative ms-3">
                                 <Dropdown>
                                     <Dropdown.Trigger>

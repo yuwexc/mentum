@@ -16,8 +16,7 @@ export type ProfileProps = {
         id: string,
         code: string,
         initiator_id: string
-    },
-    posts: Posts
+    }
 };
 
 export type Interaction = {
@@ -29,8 +28,4 @@ export type Interaction = {
         id: string,
         user: User
     }[],
-}
-
-export type Posts = {
-    list: Post[]
 }

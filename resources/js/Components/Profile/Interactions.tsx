@@ -59,7 +59,7 @@ export const Interactions = ({ friends, requests, setFriends, setRequests }: {
     };
 
     return (
-        <article className="grow max-w-[320px] max-xl:max-w-none bg-white rounded-xl">
+        <article className="grow min-w-[320px] max-w-[320px] max-xl:max-w-none bg-white rounded-xl">
             <div className="flex items-center gap-3 p-4 border-b border-gray-100">
                 <Handshake className="w-4 h-4 text-indigo-500" />
                 {

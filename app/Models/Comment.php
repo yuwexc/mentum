@@ -4,20 +4,21 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Post extends Model
+class Comment extends Model
 {
-    use HasUlids, SoftDeletes;
+    use HasUlids;
 
     /**
      * The table associated with the model.
      *
      * @var string
      */
-    protected $table = 'posts';
+    protected $table = 'comments';
 
     /**
      * The primary key associated with the table.
@@ -48,9 +49,9 @@ class Post extends Model
     protected $fillable = [
         'owner_id',
         'owner_type',
+        'user_id',
         'parent_id',
-        'content',
-        'view_count'
+        'content'
     ];
 
     /**
@@ -59,29 +60,22 @@ class Post extends Model
      * @var list<string>
      */
     protected $hidden = [
+        'owner_id',
+        'owner_type',
         'parent_id',
+        'user_id',
         'updated_at',
-        'deleted_at',
         'pivot'
     ];
-
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::creating(function (Post $post) {
-            $post->view_count = 0;
-        });
-    }
 
     public function owner(): MorphTo
     {
         return $this->morphTo();
     }
 
-    public function comments(): MorphMany
+    public function author(): BelongsTo
     {
-        return $this->morphMany(Comment::class, 'owner');
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public function likes(): MorphMany

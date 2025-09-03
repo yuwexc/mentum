@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\User\UpdateUserRequest;
+use App\Http\Resources\PostResource;
 use App\Models\CommunityRole;
 use App\Models\InteractionStatus;
 use App\Models\User;
@@ -60,9 +61,6 @@ class ProfileController extends Controller
                             'user' => $interaction->user->makeHidden(['user_feature_subscription', 'user_system_role'])
                         ];
                     }),
-                ],
-                'posts' => [
-                    'list' => $user->posts()->get()->sortByDesc('created_at')->values()->take(20)
                 ]
             ]
         ]);

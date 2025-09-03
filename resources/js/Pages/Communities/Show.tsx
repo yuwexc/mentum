@@ -11,11 +11,15 @@ import { UserInterests } from "@/Components/FeedableLayoutComponents/UserInteres
 import { CommunityManagement } from "@/Components/Community.tsx/CommunityManagement";
 import { CommunityContactInfo } from "@/Components/Community.tsx/CommunityContactInfo";
 import CommunityMembersInfo from "@/Components/Community.tsx/CommunityMembersInfo";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "sonner";
 import { Community } from "@/types/Community";
 import { CreatePostComponent } from "@/Components/Post/CreatePostComponent";
+import { Post } from "@/types/Post";
+import { NoPost } from "@/Components/Post/NoPost";
+import InfiniteScroll from "react-infinite-scroll-component";
+import { PostItem } from "@/Components/Post/Post";
 
 export default function ShowCommunity() {
 
@@ -66,6 +70,66 @@ export default function ShowCommunity() {
             }
         } finally {
             setIsProcessing(false);
+        }
+    };
+
+
+    const [showNoPost, setShowNoPost] = useState<boolean>(false);
+    const [postItems, setPostItems] = useState<Post[]>([]);
+
+    useEffect(() => {
+        fetchInitialPosts();
+    }, [community.community]);
+
+    const [hasMore, setHasMore] = useState(true);
+    const [nextPage, setNextPage] = useState(1);
+    const [loading, setLoading] = useState(false);
+
+    const fetchInitialPosts = async () => {
+        if (!community.community) return;
+
+        try {
+            const response = await axios.get(`/posts`, {
+                params: {
+                    page: 1,
+                    owner: community.community.slug || community.community.id
+                }
+            });
+
+            setPostItems(response.data.posts);
+            setHasMore(response.data.hasMore);
+            setNextPage(2);
+
+            if (postItems.length == 0) {
+                setShowNoPost(true);
+            }
+
+        } catch {
+            toast.error('Ошибка загрузки постов');
+        }
+    };
+
+    const fetchMoreData = async () => {
+        if (!hasMore || loading || !community.community) return;
+
+        setLoading(true);
+
+        try {
+            const response = await axios.get(`/posts`, {
+                params: {
+                    page: nextPage,
+                    owner: community.community.slug || community.community.id
+                }
+            });
+
+            setPostItems(prev => [...prev, ...response.data.posts]);
+            setHasMore(response.data.hasMore);
+            setNextPage(prev => prev + 1);
+
+        } catch {
+            toast.error('Ошибка загрузки. Попробуйте позже');
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -130,13 +194,34 @@ export default function ShowCommunity() {
                         </div>
                     }
                 </article>
-                {community.isMyCommunity && <CreatePostComponent owner={community.community.id} owner_type={'community'} />}
-                <article className="flex flex-col items-stretch gap-4 bg-white rounded-xl p-4 min-2xl:max-w-[560px]">
-                    <p>Пост</p>
-                </article>
-                <article className="flex flex-col items-stretch gap-4 bg-white rounded-xl p-4 min-2xl:max-w-[560px]">
-                    <p>Пост</p>
-                </article>
+                {community.isMyCommunity && <CreatePostComponent setPostItems={setPostItems} owner={community.community.id} owner_type={'community'} />}
+                {postItems.length == 0 && showNoPost && <NoPost
+                    is_owner={community.isMyCommunity!}
+                    owner_type={'community'}
+                />}
+                <section className="grow flex flex-col gap-4">
+                    <InfiniteScroll
+                        className="flex flex-col gap-4"
+                        dataLength={postItems.length}
+                        next={fetchMoreData}
+                        hasMore={hasMore}
+                        loader={
+                            <div className="flex justify-center py-8 mb-16">
+                                <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-indigo-400"></div>
+                            </div>
+                        }
+                    >
+                        {
+                            postItems.map((post, index) =>
+                                <PostItem
+                                    post={post}
+                                    setPostItems={setPostItems}
+                                    current_user_is_owner={community.isMyCommunity || false}
+                                    key={index} />
+                            )
+                        }
+                    </InfiniteScroll>
+                </section>
             </section>
 
             <section className="min-w-[320px] max-w-[320px] max-lg:hidden">

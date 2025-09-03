@@ -55,7 +55,7 @@ export const MakeInteraction = ({ setFriends, setRequests }: {
 
     if (!interactionStatus) {
         return (
-            <button onClick={handleSubscribe} disabled={isProcessing} className="ml-auto max-[426px]:hidden mb-2 max-[480px]:mb-0 h-[28px] cursor-pointer bg-indigo-500 hover:bg-indigo-600 text-white py-1 px-4 text-sm font-semibold rounded-lg transition-colors">
+            <button onClick={handleSubscribe} disabled={isProcessing} className="max-[426px]:hidden mb-2 max-[480px]:mb-0 h-[28px] cursor-pointer bg-indigo-500 hover:bg-indigo-600 text-white py-1 px-4 text-sm font-semibold rounded-lg transition-colors">
                 Подписаться
             </button>
         )
@@ -106,13 +106,13 @@ export const MakeInteraction = ({ setFriends, setRequests }: {
 
         if (isRequestSentByMe) {
             return (
-                <button onClick={handleSubscribe} disabled={isProcessing} className="ml-auto max-[426px]:hidden mb-2 max-[480px]:mb-0 h-[28px] cursor-pointer bg-indigo-50 text-indigo-500 hover:bg-indigo-100 py-1 px-4 text-sm font-semibold rounded-lg transition-colors">
+                <button onClick={handleSubscribe} disabled={isProcessing} className="max-[426px]:hidden mb-2 max-[480px]:mb-0 h-[28px] cursor-pointer bg-indigo-50 text-indigo-500 hover:bg-indigo-100 py-1 px-4 text-sm font-semibold rounded-lg transition-colors">
                     Отменить запрос
                 </button>
             );
         } else {
             return (
-                <div className="ml-auto flex gap-2">
+                <div className="flex gap-2">
                     <button onClick={handleAccept} className="max-[426px]:hidden mb-2 max-[480px]:mb-0 h-[28px] cursor-pointer bg-indigo-500 hover:bg-indigo-600 text-white py-1 px-4 text-sm font-semibold rounded-lg transition-colors">
                         Принять в друзья
                     </button>
@@ -126,7 +126,7 @@ export const MakeInteraction = ({ setFriends, setRequests }: {
 
     if (interactionStatus.code === 'followed') {
         return (
-            <button onClick={handleSubscribe} className="ml-auto max-[426px]:hidden mb-2 max-[480px]:mb-0 h-[28px] cursor-pointer bg-red-50 hover:bg-red-100 text-red-500 py-1 px-4 text-sm font-semibold rounded-lg transition-colors">
+            <button onClick={handleSubscribe} className="max-[426px]:hidden mb-2 max-[480px]:mb-0 h-[28px] cursor-pointer bg-red-50 hover:bg-red-100 text-red-500 py-1 px-4 text-sm font-semibold rounded-lg transition-colors">
                 Удалить из друзей
             </button>
         );
