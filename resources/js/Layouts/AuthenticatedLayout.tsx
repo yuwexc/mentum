@@ -83,7 +83,7 @@ export default function Authenticated({ children }: { children: ReactNode }) {
                                 href={route('chats')}
                                 className='flex items-center gap-2 text-sm text-gray-500 font-medium'
                             >
-                                Чаты
+                                Диалоги
                                 <MessageCircle strokeWidth={1.35} className="h-5 w-5" />
                             </Link>
 
