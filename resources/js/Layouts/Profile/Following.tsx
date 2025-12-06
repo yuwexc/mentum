@@ -1,6 +1,6 @@
 import { Community } from "@/types/Community"
 import { UsersRound } from "lucide-react"
-import { Avatar } from "./Avatar"
+import { Avatar } from "../../Components/Profile/Avatar"
 import { Link, usePage } from "@inertiajs/react"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, } from "@/Components/ui/dialog"
 import { useEffect, useState } from "react"

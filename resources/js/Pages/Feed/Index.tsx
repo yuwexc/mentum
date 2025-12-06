@@ -1,11 +1,11 @@
-import { MiniProfile } from '@/Components/FeedableLayoutComponents/MiniProfile';
-import { UserInterests } from '@/Components/FeedableLayoutComponents/UserInterests';
-import FeedableLayout from '@/Layouts/FeedableLayout';
+import { MiniProfile } from '@/Layouts/FeedableScreenComponents/MiniProfile';
+import { UserInterests } from '@/Layouts/FeedableScreenComponents/UserInterests';
+import FeedableScreen from '@/Screens/FeedableScreen';
 
 export default function IndexFeed() {
 
     return (
-        <FeedableLayout title=' - Лента'>
+        <FeedableScreen title=' - Лента'>
             <section className="grow max-w-[768px] flex flex-col gap-4">
                 <article className="w-full bg-white h-[100px] rounded-xl p-4">
                     <p>Лента</p>
@@ -17,6 +17,6 @@ export default function IndexFeed() {
                     <UserInterests />
                 </div>
             </section>
-        </FeedableLayout>
+        </FeedableScreen>
     );
 }

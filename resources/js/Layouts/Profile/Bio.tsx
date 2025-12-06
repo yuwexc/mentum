@@ -1,11 +1,11 @@
 import { router, usePage } from "@inertiajs/react";
-import { Button } from "../ui/button";
-import { Textarea } from "../ui/textarea";
+import { Button } from "../../Components/ui/button";
+import { Textarea } from "../../Components/ui/textarea";
 import { PageProps } from "@/types";
 import { z } from "zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Form, FormControl, FormField, FormItem, FormMessage } from "../ui/form";
+import { Form, FormControl, FormField, FormItem, FormMessage } from "../../Components/ui/form";
 import { Calendar, Globe, Loader2Icon, Pencil, PersonStanding, Save } from "lucide-react";
 import { useState } from "react";
 

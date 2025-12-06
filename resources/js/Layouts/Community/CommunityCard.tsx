@@ -1,5 +1,5 @@
 import { Check, Dot, Plus } from "lucide-react"
-import { Avatar } from "../Profile/Avatar"
+import { Avatar } from "../../Components/Profile/Avatar"
 import { Community } from "@/types/Community"
 import { Link, router, usePage } from "@inertiajs/react"
 import { PageProps } from "@/types"

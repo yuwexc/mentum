@@ -1,26 +1,26 @@
 import { Head, Link, usePage } from "@inertiajs/react";
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
+import AuthenticatedScreen from '@/Screens/AuthenticatedScreen';
 import { Banner } from "@/Components/Profile/Banner";
 import { PageProps } from "@/types";
 import { Avatar } from "@/Components/Profile/Avatar";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/Components/ui/sheet";
 import { Calendar, Globe, MessageCircle, Pencil, PlusIcon, Settings } from "lucide-react";
 import { AvatarFormUpdate } from "@/Components/Profile/AvatarFormUpdate";
-import { Bio } from "@/Components/Profile/Bio";
+import { Bio } from "@/Layouts/Profile/Bio";
 import { Skeleton } from "@/Components/ui/skeleton";
 import { Badge } from "@/Components/ui/badge";
-import { Following } from "@/Components/Profile/Following";
-import { Interactions } from "@/Components/Profile/Interactions";
+import { Following } from "@/Layouts/Profile/Following";
+import { Interactions } from "@/Layouts/Profile/Interactions";
 import { MakeInteraction } from "@/Components/Profile/MakeInteraction";
 import { useEffect, useState } from "react";
 import { User } from "@/types/User";
-import { CreatePostComponent } from "@/Components/Post/CreatePostComponent";
-import { PostItem } from "@/Components/Post/Post";
+import { CreatePostComponent } from "@/Layouts/Post/CreatePostComponent";
+import { PostItem } from "@/Layouts/Post/Post";
 import InfiniteScroll from "react-infinite-scroll-component";
 import axios from "axios";
 import { toast } from "sonner";
 import { Post } from "@/types/Post";
-import { NoPost } from "@/Components/Post/NoPost";
+import { NoPost } from "@/Layouts/Post/NoPost";
 
 export default function IndexProfile() {
 
@@ -99,7 +99,7 @@ export default function IndexProfile() {
     };
 
     return (
-        <AuthenticatedLayout>
+        <AuthenticatedScreen>
             {
                 profile ?
                     <Head title={` - @${profile.user.username}`} />
@@ -107,11 +107,11 @@ export default function IndexProfile() {
                     <Head title={` - профиль`} />
             }
 
-            <div className="min-w-full flex gap-4 px-24 max-xl:px-9 max-lg:px-3">
+            <div className="min-w-full flex gap-4 px-24 max-xl:px-9 max-lg:px-3 max-md:px-0">
                 <section className="grow-[2] flex flex-col gap-4">
-                    <article className="flex flex-col gap-4 max-sm:gap-0 bg-white rounded-xl p-1">
-                        <Banner className="h-60 max-sm:h-40 max-[426px]:h-28" />
-                        <div className="mb-4 mt-4 mx-16 max-xl:mx-4 max-[325px]:m-2 flex gap-5 max-[425px]:gap-4">
+                    <article className="max-md:h-[calc(100dvh-4.5rem)] flex flex-col gap-4 max-sm:gap-0 rounded-xl max-md:rounded-none bg-white p-1 max-md:p-4">
+                        <Banner className="max-md:hidden h-60 max-sm:h-40 max-[426px]:h-28" />
+                        <div className="mb-4 mt-4 mx-16 max-xl:mx-4 max-[325px]:m-2 flex gap-5 max-[425px]:gap-4 max-md:m-0">
                             <Avatar photo={profile ? profile.user.avatar : null} className="-mt-[90px] relative group border-[4px] border-white min-w-[140px] min-h-[90px] max-w-[140px] h-[140px] w-[140px] max-sm:h-[90px] max-sm:min-w-[90px] max-sm:w-[90px] max-sm:-mt-[45px]">
                                 {
                                     profile && profile.isMyProfile &&
@@ -296,6 +296,6 @@ export default function IndexProfile() {
                     {profile && profile.followings && <Following followings={profile.followings} />}
                 </section>
             </div>
-        </AuthenticatedLayout>
+        </AuthenticatedScreen>
     )
 }

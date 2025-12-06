@@ -1,7 +1,7 @@
 import { Button } from "@/Components/ui/button";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel } from "@/Components/ui/form";
 import { Switch } from "@/Components/ui/switch";
-import EditProfileLayout from "@/Layouts/EditProfileLayout";
+import EditProfileScreen from "@/Screens/EditProfileScreen";
 import { PageProps } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { router, usePage } from "@inertiajs/react";
@@ -41,7 +41,7 @@ export default function Edit() {
     }
 
     return (
-        <EditProfileLayout>
+        <EditProfileScreen>
             <div className='w-[calc(100%-4rem)] flex flex-col gap-4 py-4 px-8'>
                 <h2 className='font-medium text-lg'>Приватность</h2>
 
@@ -74,6 +74,6 @@ export default function Edit() {
                     </form>
                 </Form>
             </div>
-        </EditProfileLayout>
+        </EditProfileScreen>
     );
 }

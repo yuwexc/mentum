@@ -1,25 +1,25 @@
-import FeedableLayout from "@/Layouts/FeedableLayout";
+import FeedableScreen from "@/Screens/FeedableScreen";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/Components/ui/sheet";
 import { Link, usePage } from "@inertiajs/react";
 import { PageProps } from "@/types";
-import { Banner } from "@/Components/Community.tsx/Banner";
+import { Banner } from "@/Components/Community/Banner";
 import { Avatar } from "@/Components/Profile/Avatar";
 import { Pencil, Settings } from "lucide-react";
-import { AvatarFormUpdate } from "@/Components/Community.tsx/AvatarFormUpdate";
-import { MiniProfile } from "@/Components/FeedableLayoutComponents/MiniProfile";
-import { UserInterests } from "@/Components/FeedableLayoutComponents/UserInterests";
-import { CommunityManagement } from "@/Components/Community.tsx/CommunityManagement";
-import { CommunityContactInfo } from "@/Components/Community.tsx/CommunityContactInfo";
-import CommunityMembersInfo from "@/Components/Community.tsx/CommunityMembersInfo";
+import { AvatarFormUpdate } from "@/Components/Community/AvatarFormUpdate";
+import { MiniProfile } from "@/Layouts/FeedableScreenComponents/MiniProfile";
+import { UserInterests } from "@/Layouts/FeedableScreenComponents/UserInterests";
+import { CommunityManagement } from "@/Layouts/Community/CommunityManagement";
+import { CommunityContactInfo } from "@/Layouts/Community/CommunityContactInfo";
+import CommunityMembersInfo from "@/Layouts/Community/CommunityMembersInfo";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "sonner";
 import { Community } from "@/types/Community";
-import { CreatePostComponent } from "@/Components/Post/CreatePostComponent";
+import { CreatePostComponent } from "@/Layouts/Post/CreatePostComponent";
 import { Post } from "@/types/Post";
-import { NoPost } from "@/Components/Post/NoPost";
+import { NoPost } from "@/Layouts/Post/NoPost";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { PostItem } from "@/Components/Post/Post";
+import { PostItem } from "@/Layouts/Post/Post";
 
 export default function ShowCommunity() {
 
@@ -27,7 +27,7 @@ export default function ShowCommunity() {
 
     if (!community) {
         return (
-            <FeedableLayout title=" - Сообщества">
+            <FeedableScreen title=" - Сообщества">
                 <section className="grow flex flex-col items-center justify-center gap-4 bg-white rounded-xl p-4 min-2xl:max-w-[560px]">
                     <p className="text-gray-400">Сообщество не найдено</p>
                 </section>
@@ -37,7 +37,7 @@ export default function ShowCommunity() {
                         <UserInterests />
                     </div>
                 </section>
-            </FeedableLayout>
+            </FeedableScreen>
         )
     }
 
@@ -134,7 +134,7 @@ export default function ShowCommunity() {
     };
 
     return (
-        <FeedableLayout title=" - Сообщества">
+        <FeedableScreen title=" - Сообщества">
 
             <section className="grow flex flex-col items-stretch gap-4 max-[426px]:-mx-2 max-[426px]:gap-3 max-w-[768px]">
                 <article className="flex flex-col items-stretch gap-4 bg-white rounded-xl p-4 min-2xl:max-w-[560px]">
@@ -231,7 +231,7 @@ export default function ShowCommunity() {
                     {community.isMyCommunity && <CommunityManagement community={community.community} />}
                 </div>
             </section>
-        </FeedableLayout>
+        </FeedableScreen>
     )
 }
 

@@ -1,7 +1,7 @@
 import { Button, buttonVariants } from '@/Components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/Components/ui/form';
 import { Input } from '@/Components/ui/input';
-import GuestLayout from '@/Layouts/GuestLayout';
+import GuestScreen from '@/Screens/GuestScreen';
 import { Head, Link, router } from '@inertiajs/react';
 import { ChevronLeft } from 'lucide-react';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -35,7 +35,7 @@ export default function ForgotPassword({ status }: { status?: string }) {
     }
 
     return (
-        <GuestLayout>
+        <GuestScreen>
             <Head title="Forgot Password" />
 
             {status && (
@@ -77,6 +77,6 @@ export default function ForgotPassword({ status }: { status?: string }) {
                     </div>
                 </form>
             </Form>
-        </GuestLayout>
+        </GuestScreen>
     );
 }

@@ -2,7 +2,7 @@ import GoogleLoginButton from '@/Components/GoogleLoginButton';
 import { Button, buttonVariants } from '@/Components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/Components/ui/form';
 import { Input } from '@/Components/ui/input';
-import GuestLayout from '@/Layouts/GuestLayout';
+import GuestScreen from '@/Screens/GuestScreen';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Head, Link, router } from '@inertiajs/react';
 import { ChevronLeft } from 'lucide-react';
@@ -41,7 +41,7 @@ export default function Login() {
     }
 
     return (
-        <GuestLayout>
+        <GuestScreen>
             <Head title=" - Вход" />
 
             <Form {...form}>
@@ -92,6 +92,6 @@ export default function Login() {
                 </form>
                 <GoogleLoginButton />
             </Form>
-        </GuestLayout>
+        </GuestScreen>
     );
 }

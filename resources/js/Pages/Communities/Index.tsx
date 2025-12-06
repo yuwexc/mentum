@@ -1,7 +1,7 @@
-import { CommunityCard } from "@/Components/Community.tsx/CommunityCard";
-import { MiniProfile } from "@/Components/FeedableLayoutComponents/MiniProfile";
-import { UserInterests } from "@/Components/FeedableLayoutComponents/UserInterests";
-import FeedableLayout from "@/Layouts/FeedableLayout";
+import { CommunityCard } from "@/Layouts/Community/CommunityCard";
+import { MiniProfile } from "@/Layouts/FeedableScreenComponents/MiniProfile";
+import { UserInterests } from "@/Layouts/FeedableScreenComponents/UserInterests";
+import FeedableScreen from "@/Screens/FeedableScreen";
 import { PageProps } from "@/types";
 import { Link, usePage } from "@inertiajs/react";
 import { Plus } from "lucide-react";
@@ -11,7 +11,7 @@ export default function IndexCommunities() {
     const { communities } = usePage<PageProps>().props;
 
     return (
-        <FeedableLayout title=" - Сообщества">
+        <FeedableScreen title=" - Сообщества">
 
             <section className="grow max-w-[768px] flex flex-wrap gap-4 min-2xl:max-w-[560px]">
                 <div className="w-full self-start flex justify-between items-center gap-4 max-sm:flex-col">
@@ -41,6 +41,6 @@ export default function IndexCommunities() {
                     <UserInterests />
                 </div>
             </section>
-        </FeedableLayout>
+        </FeedableScreen>
     )
 }

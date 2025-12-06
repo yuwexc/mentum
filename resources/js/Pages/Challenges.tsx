@@ -1,12 +1,12 @@
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
+import AuthenticatedScreen from '@/Screens/AuthenticatedScreen';
 import { Head } from '@inertiajs/react';
 
 export default function Challenges() {
     return (
-        <AuthenticatedLayout>
+        <AuthenticatedScreen>
             <Head title=" - Челледнжи" />
 
             <p>Челледнжи</p>
-        </AuthenticatedLayout>
+        </AuthenticatedScreen>
     )
 }

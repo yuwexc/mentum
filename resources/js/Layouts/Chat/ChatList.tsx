@@ -1,6 +1,6 @@
-import { ChatCreate } from "./ChatCreate"
-import { ChatListItem } from "./ChatListItem"
-import { ChatSearch } from "./ChatSearch"
+import { ChatCreate } from "../../Components/Chat/ChatCreate"
+import { ChatListItem } from "../../Components/Chat/ChatListItem"
+import { ChatSearch } from "../../Components/Chat/ChatSearch"
 
 export const ChatList = () => {
 

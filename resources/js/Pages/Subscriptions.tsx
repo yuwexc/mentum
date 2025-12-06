@@ -1,12 +1,12 @@
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
+import AuthenticatedScreen from '@/Screens/AuthenticatedScreen';
 import { Head } from '@inertiajs/react';
 
 export default function Subscriptions() {
     return (
-        <AuthenticatedLayout>
+        <AuthenticatedScreen>
             <Head title=" - Подписки" />
 
             <p>Подписки</p>
-        </AuthenticatedLayout>
+        </AuthenticatedScreen>
     )
 }

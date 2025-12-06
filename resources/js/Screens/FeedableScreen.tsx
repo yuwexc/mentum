@@ -1,11 +1,11 @@
 import { ReactNode } from "react";
-import Authenticated from "./AuthenticatedLayout";
+import Authenticated from "./AuthenticatedScreen";
 import { Head, usePage } from "@inertiajs/react";
 import { Link } from '@inertiajs/react';
 import { PageProps } from "@/types";
 import { ArrowUpRight, BellRing, Crown } from "lucide-react";
 
-export default function FeedableLayout({ children, title }: { children: ReactNode, title: string }) {
+export default function FeedableScreen({ children, title }: { children: ReactNode, title: string }) {
 
     const { auth } = usePage<PageProps>().props;
 

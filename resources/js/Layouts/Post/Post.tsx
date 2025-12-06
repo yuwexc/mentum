@@ -1,5 +1,5 @@
 import { Post } from "@/types/Post"
-import { Avatar } from "../Profile/Avatar"
+import { Avatar } from "../../Components/Profile/Avatar"
 import { Clock, Ellipsis, Eye, Heart } from "lucide-react"
 import { Link, usePage } from "@inertiajs/react"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, } from "@/Components/ui/dropdown-menu"
@@ -7,8 +7,8 @@ import { useEffect, useRef, useState } from "react"
 import axios from "axios"
 import { PageProps } from "@/types"
 import { toast } from "sonner"
-import { Comment } from "./Comment"
-import { CreateCommentComponent } from "./CreateCommentComponent"
+import { Comment } from "../../Components/Post/Comment"
+import { CreateCommentComponent } from "../../Components/Post/CreateCommentComponent"
 import { CommentInterface } from "@/types/Comment"
 
 export const PostItem = ({ post, setPostItems, current_user_is_owner }:

@@ -1,7 +1,7 @@
-import { CommunityManagement } from "@/Components/Community.tsx/CommunityManagement";
-import { MiniProfile } from "@/Components/FeedableLayoutComponents/MiniProfile";
-import { UserInterests } from "@/Components/FeedableLayoutComponents/UserInterests";
-import FeedableLayout from "@/Layouts/FeedableLayout";
+import { CommunityManagement } from "@/Layouts/Community/CommunityManagement";
+import { MiniProfile } from "@/Layouts/FeedableScreenComponents/MiniProfile";
+import { UserInterests } from "@/Layouts/FeedableScreenComponents/UserInterests";
+import FeedableScreen from "@/Screens/FeedableScreen";
 import { PageProps } from "@/types";
 import { Link, router, usePage } from "@inertiajs/react";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/Components/ui/form";
@@ -108,7 +108,7 @@ export default function EditCommunities() {
 
     if (!community) {
         return (
-            <FeedableLayout title=" - Сообщества">
+            <FeedableScreen title=" - Сообщества">
                 <section className="grow max-w-[768px] flex flex-col items-center justify-center gap-4 bg-white rounded-xl p-4 min-2xl:max-w-[560px]">
                     <p className="text-gray-400">Сообщество не найдено</p>
                 </section>
@@ -118,12 +118,12 @@ export default function EditCommunities() {
                         <UserInterests />
                     </div>
                 </section>
-            </FeedableLayout>
+            </FeedableScreen>
         )
     }
 
     return (
-        <FeedableLayout title=" - Настройки сообщества">
+        <FeedableScreen title=" - Настройки сообщества">
 
             <section className='grow max-w-[768px] flex flex-col gap-4 bg-white rounded-xl p-4 min-2xl:max-w-[560px]'>
                 <div className="border-b border-gray-100 pb-4">
@@ -324,6 +324,6 @@ export default function EditCommunities() {
                     <CommunityManagement community={community.community} />
                 </div>
             </section>
-        </FeedableLayout>
+        </FeedableScreen>
     )
 }

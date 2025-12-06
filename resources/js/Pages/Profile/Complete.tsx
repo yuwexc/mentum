@@ -3,7 +3,7 @@ import { Calendar } from '@/Components/ui/calendar';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/Components/ui/form';
 import { Input } from '@/Components/ui/input';
 import { Popover, PopoverContent, PopoverTrigger } from '@/Components/ui/popover';
-import GuestLayout from '@/Layouts/GuestLayout';
+import GuestScreen from '@/Screens/GuestScreen';
 import { cn } from '@/lib/utils';
 import { PageProps } from '@/types';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -96,7 +96,7 @@ export default function CompleteProfileForm() {
     }
 
     return (
-        <GuestLayout>
+        <GuestScreen>
             <Head title="- Завершение регистрации" />
 
             <Form {...form}>
@@ -222,6 +222,6 @@ export default function CompleteProfileForm() {
                 </form>
             </Form>
 
-        </GuestLayout >
+        </GuestScreen >
     );
 }

@@ -1,11 +1,11 @@
-import { ChatList } from "@/Components/Chat.tsx/ChatList";
-import FeedableLayout from "@/Layouts/FeedableLayout";
-import { MiniProfile } from "@/Components/FeedableLayoutComponents/MiniProfile";
-import { UserInterests } from "@/Components/FeedableLayoutComponents/UserInterests";
+import { ChatList } from "@/Layouts/Chat/ChatList";
+import FeedableScreen from "@/Screens/FeedableScreen";
+import { MiniProfile } from "@/Layouts/FeedableScreenComponents/MiniProfile";
+import { UserInterests } from "@/Layouts/FeedableScreenComponents/UserInterests";
 
 export default function IndexCommunities() {
     return (
-        <FeedableLayout title=" - Чаты">
+        <FeedableScreen title=" - Чаты">
 
             <ChatList />
 
@@ -15,6 +15,6 @@ export default function IndexCommunities() {
                     <UserInterests />
                 </div>
             </section>
-        </FeedableLayout>
+        </FeedableScreen>
     )
 }

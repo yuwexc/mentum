@@ -1,13 +1,13 @@
 import { NavLinkEditProfile } from '@/Components/NavLinkEditProfile';
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
+import AuthenticatedScreen from '@/Screens/AuthenticatedScreen';
 import { Head } from '@inertiajs/react';
 import { CircleUserRound, KeyRound, Lock, Rss, Star, Trash2 } from 'lucide-react';
 import { ReactNode } from 'react';
 
-export default function EditProfileLayout({ children }: { children: ReactNode }) {
+export default function EditProfileScreen({ children }: { children: ReactNode }) {
 
     return (
-        <AuthenticatedLayout>
+        <AuthenticatedScreen>
             <Head title=" - Настройки" />
 
             <div className='flex bg-white mx-24 max-xl:mx-4 rounded-xl max-lg:flex-col'>
@@ -64,6 +64,6 @@ export default function EditProfileLayout({ children }: { children: ReactNode })
                 {children}
             </div>
 
-        </AuthenticatedLayout>
+        </AuthenticatedScreen>
     );
 }

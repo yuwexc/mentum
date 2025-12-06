@@ -1,13 +1,13 @@
 import { AvatarFormUpdate } from "@/Components/Profile/AvatarFormUpdate";
 import { PersonalDataFormUpdate } from "@/Components/Profile/PersonalDataFormUpdate";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/Components/ui/accordion";
-import EditProfileLayout from "@/Layouts/EditProfileLayout";
+import EditProfileScreen from "@/Screens/EditProfileScreen";
 import { CircleUserRound, Image } from "lucide-react";
 
 export default function Edit() {
 
     return (
-        <EditProfileLayout>
+        <EditProfileScreen>
             <div className='w-[calc(100%-4rem)] flex flex-col gap-4 py-4 px-8 max-lg:w-full'>
                 <h2 className='font-medium text-lg'>Ваш профиль</h2>
                 <Accordion type="multiple" defaultValue={["item-2"]}>
@@ -35,6 +35,6 @@ export default function Edit() {
                     </AccordionItem>
                 </Accordion>
             </div>
-        </EditProfileLayout>
+        </EditProfileScreen>
     );
 }

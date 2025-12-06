@@ -1,7 +1,7 @@
 import { PageProps } from "@/types"
 import { Link, usePage } from "@inertiajs/react"
 import { Handshake, X } from "lucide-react"
-import { Avatar } from "./Avatar";
+import { Avatar } from "../../Components/Profile/Avatar";
 import { Dispatch, SetStateAction, useState } from "react";
 import axios from "axios";
 import { toast } from "sonner";

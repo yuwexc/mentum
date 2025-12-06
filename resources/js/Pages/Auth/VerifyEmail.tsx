@@ -1,5 +1,5 @@
 import { Button } from '@/Components/ui/button';
-import GuestLayout from '@/Layouts/GuestLayout';
+import GuestScreen from '@/Screens/GuestScreen';
 import { Head, Link, useForm } from '@inertiajs/react';
 import { MailCheck } from 'lucide-react';
 import { FormEventHandler } from 'react';
@@ -15,7 +15,7 @@ export default function VerifyEmail() {
     };
 
     return (
-        <GuestLayout>
+        <GuestScreen>
             <Head title=" - Подтверждение электронной почты" />
 
             <div className="max-w-md w-full mx-auto space-y-6">
@@ -57,6 +57,6 @@ export default function VerifyEmail() {
                     </div>
                 </div>
             </div>
-        </GuestLayout>
+        </GuestScreen>
     );
 }

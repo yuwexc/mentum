@@ -1,9 +1,9 @@
-import { MiniProfile } from "@/Components/FeedableLayoutComponents/MiniProfile";
-import { UserInterests } from "@/Components/FeedableLayoutComponents/UserInterests";
+import { MiniProfile } from "@/Layouts/FeedableScreenComponents/MiniProfile";
+import { UserInterests } from "@/Layouts/FeedableScreenComponents/UserInterests";
 import { Avatar } from "@/Components/Profile/Avatar";
 import { Input } from "@/Components/ui/input";
 import { Skeleton } from "@/Components/ui/skeleton";
-import FeedableLayout from "@/Layouts/FeedableLayout";
+import FeedableScreen from "@/Screens/FeedableScreen";
 import { PageProps } from "@/types";
 import { Interaction } from "@/types/Profile";
 import { User } from "@/types/User";
@@ -19,7 +19,7 @@ export default function ShowFriends() {
 
     if (!friends) {
         return (
-            <FeedableLayout title=" - Друзья">
+            <FeedableScreen title=" - Друзья">
                 <section className="grow flex flex-col items-stretch gap-4 max-[426px]:-mx-2 max-[426px]:gap-3 max-w-[768px]">
                     <div>
                         {
@@ -34,7 +34,7 @@ export default function ShowFriends() {
                         <UserInterests />
                     </div>
                 </section>
-            </FeedableLayout>
+            </FeedableScreen>
         )
     }
 
@@ -107,7 +107,7 @@ export default function ShowFriends() {
     };
 
     return (
-        <FeedableLayout title=" - Друзья">
+        <FeedableScreen title=" - Друзья">
             <section className="grow self-start bg-white flex flex-col items-stretch max-[426px]:-mx-2 max-w-[768px] rounded-xl">
                 <div className="w-full self-start flex justify-between items-center gap-4 max-sm:flex-col pb-0 p-4">
                     <div>
@@ -192,6 +192,6 @@ export default function ShowFriends() {
                     </Link>
                 </article>
             </section>
-        </FeedableLayout>
+        </FeedableScreen>
     )
 }

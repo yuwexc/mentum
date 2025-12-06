@@ -5,7 +5,7 @@ import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { Toaster } from '@/Components/ui/sonner';
 import { PageProps } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
-import { MessageCircle } from 'lucide-react';
+import { CircleUserRound, House, MessageCircle, Newspaper, Swords, UsersRound } from 'lucide-react';
 import { ReactNode, useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
@@ -33,7 +33,7 @@ export default function Authenticated({ children }: { children: ReactNode }) {
 
     return (
         <div className="min-h-screen bg-gray-100">
-            <header className="border-b border-gray-100 bg-white sticky top-0 z-[997]">
+            <header className="max-md:hidden border-b border-gray-100 bg-white sticky top-0 z-[997]">
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div className="flex h-16 justify-between">
                         <div className="flex">
@@ -248,7 +248,27 @@ export default function Authenticated({ children }: { children: ReactNode }) {
                 </div>
             </header>
 
-            <main className="py-4">{children}</main>
+            <main className="py-4 max-md:py-0">{children}</main>
+
+            <footer className="hidden max-md:block fixed bottom-0 w-full">
+                <nav className='w-full flex justify-evenly items-center bg-white border p-4'>
+                    {/* <a href={route('feed')}>
+                        <House />
+                    </a> */}
+                    <a href={route('communities')}>
+                        <UsersRound />
+                    </a>
+                    {/* <a href={route('articles')}>
+                        <Newspaper />
+                    </a>
+                    <a href={route('challenges')}>
+                        <Swords />
+                    </a> */}
+                    <a href={route('profile.show', { user: auth.user.username })}>
+                        <CircleUserRound />
+                    </a>
+                </nav>
+            </footer>
 
             <Toaster richColors expand duration={3000} />
         </div>

@@ -1,11 +1,11 @@
-import { MiniProfile } from "@/Components/FeedableLayoutComponents/MiniProfile";
-import { UserInterests } from "@/Components/FeedableLayoutComponents/UserInterests";
+import { MiniProfile } from "@/Layouts/FeedableScreenComponents/MiniProfile";
+import { UserInterests } from "@/Layouts/FeedableScreenComponents/UserInterests";
 import { Avatar } from "@/Components/Profile/Avatar";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/Components/ui/form";
 import { Input } from "@/Components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/Components/ui/select";
 import { Textarea } from "@/Components/ui/textarea";
-import FeedableLayout from "@/Layouts/FeedableLayout";
+import FeedableScreen from "@/Screens/FeedableScreen";
 import { PageProps } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { router, usePage } from "@inertiajs/react";
@@ -92,7 +92,7 @@ export default function CreateCommunities() {
     }
 
     return (
-        <FeedableLayout title=" - Создание сообщества">
+        <FeedableScreen title=" - Создание сообщества">
 
             <section className='grow max-w-[768px] flex flex-col gap-4 bg-white rounded-xl p-4 min-2xl:max-w-[560px]'>
                 <div className="border-b border-gray-100 pb-4">
@@ -293,6 +293,6 @@ export default function CreateCommunities() {
                 </div>
             </section>
 
-        </FeedableLayout>
+        </FeedableScreen>
     )
 }

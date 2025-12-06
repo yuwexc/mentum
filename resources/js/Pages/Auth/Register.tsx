@@ -3,7 +3,7 @@ import { Calendar } from '@/Components/ui/calendar';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/Components/ui/form';
 import { Input } from '@/Components/ui/input';
 import { Popover, PopoverContent, PopoverTrigger } from '@/Components/ui/popover';
-import GuestLayout from '@/Layouts/GuestLayout';
+import GuestScreen from '@/Screens/GuestScreen';
 import { cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Head, Link, router } from '@inertiajs/react';
@@ -91,7 +91,7 @@ export default function Register() {
     }
 
     return (
-        <GuestLayout>
+        <GuestScreen>
             <Head title="- Регистрация" />
 
             <Form {...form}>
@@ -217,6 +217,6 @@ export default function Register() {
                 </form>
             </Form>
 
-        </GuestLayout >
+        </GuestScreen >
     );
 }

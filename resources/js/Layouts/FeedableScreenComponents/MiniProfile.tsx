@@ -1,6 +1,6 @@
 import { Link, usePage } from "@inertiajs/react"
-import { Avatar } from "../Profile/Avatar"
-import { Banner } from "../Profile/Banner"
+import { Avatar } from "../../Components/Profile/Avatar"
+import { Banner } from "../../Components/Profile/Banner"
 import { PageProps } from "@/types";
 
 export const MiniProfile = () => {

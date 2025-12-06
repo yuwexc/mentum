@@ -1,8 +1,8 @@
-import { CommunityManagement } from "@/Components/Community.tsx/CommunityManagement";
-import { MiniProfile } from "@/Components/FeedableLayoutComponents/MiniProfile";
-import { UserInterests } from "@/Components/FeedableLayoutComponents/UserInterests";
+import { CommunityManagement } from "@/Layouts/Community/CommunityManagement";
+import { MiniProfile } from "@/Layouts/FeedableScreenComponents/MiniProfile";
+import { UserInterests } from "@/Layouts/FeedableScreenComponents/UserInterests";
 import { Avatar } from "@/Components/Profile/Avatar";
-import FeedableLayout from "@/Layouts/FeedableLayout";
+import FeedableScreen from "@/Screens/FeedableScreen";
 import { PageProps } from "@/types";
 import { User } from "@/types/User";
 import { Link, router, usePage } from "@inertiajs/react";
@@ -24,7 +24,7 @@ export default function MembersCommunities() {
 
     if (!community) {
         return (
-            <FeedableLayout title=" - Сообщества">
+            <FeedableScreen title=" - Сообщества">
                 <section className="grow max-w-[768px] flex flex-col items-center justify-center gap-4 bg-white rounded-xl p-4 min-2xl:max-w-[560px]">
                     <p className="text-gray-400">Сообщество не найдено</p>
                 </section>
@@ -34,7 +34,7 @@ export default function MembersCommunities() {
                         <UserInterests />
                     </div>
                 </section>
-            </FeedableLayout>
+            </FeedableScreen>
         )
     }
 
@@ -94,7 +94,7 @@ export default function MembersCommunities() {
     }
 
     return (
-        <FeedableLayout title=" - Участники сообщества">
+        <FeedableScreen title=" - Участники сообщества">
             <section className='max-h-max grow max-w-[768px] flex flex-col gap-4 bg-white rounded-xl p-4 min-2xl:max-w-[560px]'>
                 <article className="border-b border-gray-100 pb-4">
                     <h2 className="text-2xl font-bold text-gray-900">{community.community.name}</h2>
@@ -184,6 +184,6 @@ export default function MembersCommunities() {
                     <CommunityManagement community={community.community} />
                 </div>
             </section>
-        </FeedableLayout>
+        </FeedableScreen>
     )
 }

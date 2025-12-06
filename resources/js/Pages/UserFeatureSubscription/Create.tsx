@@ -1,6 +1,6 @@
 import { Alert, AlertDescription, AlertTitle } from "@/Components/ui/alert";
 import { Button } from "@/Components/ui/button";
-import Authenticated from "@/Layouts/AuthenticatedLayout";
+import Authenticated from "@/Screens/AuthenticatedScreen";
 import { PageProps } from "@/types";
 import { FeatureSubscription } from "@/types/FeatureSubscription";
 import { Head, usePage } from "@inertiajs/react";

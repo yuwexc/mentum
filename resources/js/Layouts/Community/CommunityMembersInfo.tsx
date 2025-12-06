@@ -7,7 +7,7 @@ import axios from "axios";
 import { Link, usePage } from "@inertiajs/react";
 import { PageProps } from "@/types";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { Avatar } from "../Profile/Avatar";
+import { Avatar } from "../../Components/Profile/Avatar";
 
 export default function CommunityMembersInfo() {
 

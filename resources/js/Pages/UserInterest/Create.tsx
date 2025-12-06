@@ -1,5 +1,5 @@
 import InfiniteScroll from 'react-infinite-scroll-component';
-import Authenticated from "@/Layouts/AuthenticatedLayout";
+import Authenticated from "@/Screens/AuthenticatedScreen";
 import { PageProps } from "@/types";
 import { Topic } from "@/types/Topic";
 import { Head, Link, router, usePage } from "@inertiajs/react";
