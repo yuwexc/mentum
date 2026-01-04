@@ -248,7 +248,7 @@ export default function Authenticated({ children }: { children: ReactNode }) {
                 </div>
             </header>
 
-            <main className="py-4 max-md:pt-0 max-md:pb-[72px] max-sm:px-2">{children}</main>
+            <main className="py-4 max-md:pt-2 max-md:pb-[72px] max-sm:px-2">{children}</main>
 
             <footer className="hidden max-md:block fixed bottom-0 w-full">
                 <nav className='w-full flex justify-evenly items-center bg-white border p-4'>

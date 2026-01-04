@@ -14,7 +14,7 @@ export default function IndexCommunities() {
         <FeedableScreen title=" - Сообщества">
 
             <section className="grow max-w-[768px] flex flex-wrap gap-4 min-2xl:max-w-[560px]">
-                <div className="w-full self-start flex justify-between items-center gap-4 max-sm:flex-col">
+                <div className="w-full self-start flex justify-between items-center gap-4 max-sm:flex-col max-md:mt-4">
                     <div>
                         <h2 className="font-bold text-2xl">
                             Сообщества по вашим интересам
@@ -23,8 +23,12 @@ export default function IndexCommunities() {
                             Присоединяйтесь к сообществам, которые вам интересны
                         </p>
                     </div>
-                    <Link href={route('communities.create')} className="flex items-center gap-2 bg-indigo-500 hover:bg-indigo-600 transition-colors text-white py-2 px-4 text-sm font-medium rounded-lg">
-                        <span>Создать</span>
+                    <Link
+                        href={route('communities.create')}
+                        className="flex items-center gap-2 bg-indigo-500 hover:bg-indigo-600 transition-colors 
+                        text-white py-2 px-4 text-sm font-medium rounded-lg max-sm:fixed bottom-20 right-4
+                        max-sm:rounded-full max-sm:aspect-square">
+                        <span className="max-sm:hidden">Создать</span>
                         <Plus size={18} />
                     </Link>
                 </div>

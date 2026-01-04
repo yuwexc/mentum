@@ -108,8 +108,8 @@ export default function ShowFriends() {
 
     return (
         <FeedableScreen title=" - Друзья">
-            <section className="grow self-start bg-white flex flex-col items-stretch max-[426px]:-mx-2 max-w-[768px] rounded-xl">
-                <div className="w-full self-start flex justify-between items-center gap-4 max-sm:flex-col pb-0 p-4">
+            <section className="grow self-start bg-white flex flex-col items-stretch max-w-[768px] rounded-xl">
+                <div className="w-full self-start flex justify-between items-center gap-4 pb-0 p-4">
                     <div>
                         <h2 className="font-bold text-2xl">
                             Друзья
@@ -153,7 +153,7 @@ export default function ShowFriends() {
                         </>
                     }
                 >
-                    <div className="flex flex-col gap-4 p-6">
+                    <div className="flex flex-col gap-4 p-6 max-sm:p-4">
                         {
                             (searchQuery ? filteredFriends : friendsItems).map((user, index) =>
                                 <div key={index} className="flex items-center gap-4">
@@ -161,8 +161,8 @@ export default function ShowFriends() {
                                     <Link href={`/@${user.username}`} className="font-medium">{user.full_name}</Link>
                                     {
                                         friends.user.id === auth.user.id &&
-                                        <button disabled={isProcessing} onClick={() => handleSubscribe(user.username)} className="ml-auto max-[426px]:hidden mb-2 max-[480px]:mb-0 h-[28px] cursor-pointer bg-red-50 hover:bg-red-100 text-red-500 py-1 px-4 text-sm font-semibold rounded-lg transition-colors">
-                                            Удалить из друзей
+                                        <button disabled={isProcessing} onClick={() => handleSubscribe(user.username)} className="ml-auto h-[28px] cursor-pointer bg-red-50 hover:bg-red-100 text-red-500 py-1 px-4 text-sm font-semibold rounded-lg transition-colors">
+                                            Удалить
                                         </button>
                                     }
                                 </div>

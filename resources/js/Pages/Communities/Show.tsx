@@ -136,7 +136,7 @@ export default function ShowCommunity() {
     return (
         <FeedableScreen title=" - Сообщества">
 
-            <section className="grow flex flex-col items-stretch gap-4 max-[426px]:-mx-2 max-[426px]:gap-3 max-w-[768px]">
+            <section className="grow flex flex-col items-stretch gap-4 max-w-[768px]">
                 <article className="flex flex-col items-stretch gap-4 bg-white rounded-xl p-4 min-2xl:max-w-[560px]">
                     <Banner photo={community.community.banner} className="h-40" />
                     <Avatar photo={community.community.avatar} person={false} className="-mt-14 ml-6 border-white border-4 relative group h-[80px] w-[80px]">
@@ -156,26 +156,37 @@ export default function ShowCommunity() {
                         }
                     </Avatar>
                     <div className="-mt-2">
-                        <div className="flex items-center gap-3">
-                            <h2 className="ml-6 text-2xl font-bold text-gray-900 tracking-tight">{community.community.name}</h2>
-                            {
-                                community.isMyCommunity && <Link href={route("community.edit", { community: community.community.slug || community.community.id })}><Settings className="text-gray-400" size={16} /></Link>
-                            }
+                        <div className="flex items-center gap-3 max-sm:flex-col max-sm:items-stretch max-sm:gap-0">
+                            <div className="flex items-center gap-3 mx-6">
+                                <h2 className="text-2xl font-bold text-gray-900 tracking-tight">{community.community.name}</h2>
+                                {
+                                    community.isMyCommunity && <Link href={route("community.edit", { community: community.community.slug || community.community.id })}><Settings className="text-gray-400" size={16} /></Link>
+                                }
+                            </div>
+                            <div className={`hidden max-sm:flex items-center justify-between ${communityItem.owner != auth.user.username ? 'mb-3' : ''}`}>
+                                <p className="ml-6 text-gray-500 text-sm">
+                                    <span className="font-medium text-indigo-500">{community.community.topic.name}</span>
+                                    {' • '}{communityItem.followers_count} {getSubscribersText(communityItem.followers_count)}
+                                </p>
+                                {
+                                    community.community.created_at_formatted && <p className="text-gray-500 text-sm max-sm:hidden">с {community.community.created_at_formatted.slice(-4)} г.</p>
+                                }
+                            </div>
                             {
                                 communityItem.owner === auth.user.username ? (
                                     null
                                 ) : !communityItem.is_followed ? (
-                                    <button disabled={isProcessing} onClick={handleSubscribe} className="ml-auto h-[28px] cursor-pointer bg-indigo-500 hover:bg-indigo-600 text-white py-1 px-4 text-sm font-semibold rounded-lg transition-colors">
+                                    <button disabled={isProcessing} onClick={handleSubscribe} className="ml-auto h-[28px] cursor-pointer bg-indigo-500 hover:bg-indigo-600 text-white py-1 px-4 text-sm font-semibold rounded-lg transition-colors max-sm:mx-6">
                                         Подписаться
                                     </button>
                                 ) : (
-                                    <button disabled={isProcessing} onClick={handleSubscribe} className="ml-auto h-[28px] cursor-pointer bg-indigo-50 hover:bg-indigo-100 text-indigo-500 py-1 px-4 text-sm font-semibold rounded-lg transition-colors">
+                                    <button disabled={isProcessing} onClick={handleSubscribe} className="ml-auto h-[28px] cursor-pointer bg-indigo-50 hover:bg-indigo-100 text-indigo-500 py-1 px-4 text-sm font-semibold rounded-lg transition-colors max-sm:mx-6">
                                         Отписаться
                                     </button>
                                 )
                             }
                         </div>
-                        <div className="flex items-center justify-between">
+                        <div className="flex items-center justify-between max-sm:hidden">
                             <p className="ml-6 text-gray-500 text-sm">
                                 <span className="font-medium text-indigo-500">{community.community.topic.name}</span>
                                 {' • '}{communityItem.followers_count} {getSubscribersText(communityItem.followers_count)}

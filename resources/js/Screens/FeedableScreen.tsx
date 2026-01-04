@@ -13,7 +13,7 @@ export default function FeedableScreen({ children, title }: { children: ReactNod
         <Authenticated>
             <Head title={title} />
 
-            <div className="min-w-full flex justify-center gap-4 px-4 max-lg:px-14 max-[920px]:px-28 max-sm:px-4">
+            <div className="min-w-full flex justify-center gap-4 px-4 max-lg:px-14 max-[920px]:px-28 max-sm:px-0">
                 <section className="min-w-[320px] max-w-[320px] max-xl:min-w-[140px] max-lg:hidden">
                     <div className="sticky top-[81px] flex flex-col gap-4">
                         {

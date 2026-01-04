@@ -121,7 +121,7 @@ export const MakeInteraction = ({ setFriends, setRequests }: {
             );
         } else {
             return (
-                <div className="flex gap-2">
+                <div className="flex gap-2 max-sm:w-full">
                     <button
                         onClick={handleAccept}
                         className={`${buttonClasses} bg-indigo-500 hover:bg-indigo-600 text-white`}>
