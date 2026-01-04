@@ -2,7 +2,6 @@ import { z } from "zod";
 import { Form, FormControl, FormField, FormItem } from "../ui/form";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { router } from "@inertiajs/react";
 import { Send } from "lucide-react";
 import { Post } from "@/types/Post";
 import { CommentInterface } from "@/types/Comment";

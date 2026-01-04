@@ -1,6 +1,4 @@
 import { CommentInterface } from "./Comment";
-import { Community } from "./Community";
-import { User } from "./User";
 
 interface UserPost {
     id: string,

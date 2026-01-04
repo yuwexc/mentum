@@ -50,42 +50,42 @@ export default function Authenticated({ children }: { children: ReactNode }) {
                                 >
                                     Лента
                                 </NavLink>
-                                <NavLink
+                                {/* <NavLink
                                     href={route('subscriptions')}
                                     active={route().current('subscriptions')}
                                 >
                                     Подписки
-                                </NavLink>
+                                </NavLink> */}
                                 <NavLink
                                     href={route('communities')}
                                     active={route().current('communities')}
                                 >
                                     Сообщества
                                 </NavLink>
-                                <NavLink
+                                {/* <NavLink
                                     href={route('articles')}
                                     active={route().current('articles')}
                                 >
                                     Статьи
-                                </NavLink>
-                                <NavLink
+                                </NavLink> */}
+                                {/* <NavLink
                                     href={route('challenges')}
                                     active={route().current('challenges')}
                                 >
                                     Челленджи
-                                </NavLink>
+                                </NavLink> */}
 
                             </div>
                         </div>
 
                         <div className="hidden sm:ms-6 sm:flex sm:items-center gap-4">
-                            <Link
+                            {/* <Link
                                 href={route('chats')}
                                 className='flex items-center gap-2 text-sm text-gray-500 font-medium'
                             >
                                 Диалоги
                                 <MessageCircle strokeWidth={1.35} className="h-5 w-5" />
-                            </Link>
+                            </Link> */}
 
                             <div className="relative ms-3">
                                 <Dropdown>
@@ -193,30 +193,30 @@ export default function Authenticated({ children }: { children: ReactNode }) {
                         >
                             Лента
                         </ResponsiveNavLink>
-                        <ResponsiveNavLink
+                        {/* <ResponsiveNavLink
                             href={route('subscriptions')}
                             active={route().current('subscriptions')}
                         >
                             Подписки
-                        </ResponsiveNavLink>
+                        </ResponsiveNavLink> */}
                         <ResponsiveNavLink
                             href={route('communities')}
                             active={route().current('communities')}
                         >
                             Сообщества
                         </ResponsiveNavLink>
-                        <ResponsiveNavLink
+                        {/* <ResponsiveNavLink
                             href={route('articles')}
                             active={route().current('articles')}
                         >
                             Статьи
-                        </ResponsiveNavLink>
-                        <ResponsiveNavLink
+                        </ResponsiveNavLink> */}
+                        {/* <ResponsiveNavLink
                             href={route('challenges')}
                             active={route().current('challenges')}
                         >
                             Челленджи
-                        </ResponsiveNavLink>
+                        </ResponsiveNavLink> */}
                     </div>
 
                     <div className="border-t border-gray-200 pb-1 pt-4">
@@ -248,7 +248,7 @@ export default function Authenticated({ children }: { children: ReactNode }) {
                 </div>
             </header>
 
-            <main className="py-4 max-md:py-0">{children}</main>
+            <main className="py-4 max-md:pt-0 max-md:pb-[72px] max-sm:px-2">{children}</main>
 
             <footer className="hidden max-md:block fixed bottom-0 w-full">
                 <nav className='w-full flex justify-evenly items-center bg-white border p-4'>

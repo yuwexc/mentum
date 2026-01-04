@@ -160,7 +160,7 @@ export default function CreateUserInterest() {
 
                 </InfiniteScroll>
 
-                <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-white shadow-lg rounded-full px-6 py-3 flex items-center text-nowrap">
+                <div className="fixed bottom-6 max-md:bottom-20 left-1/2 transform -translate-x-1/2 bg-white shadow-lg rounded-full px-6 py-3 flex items-center text-nowrap">
                     <span className="mr-4 text-gray-700">
                         Выбрано: <span className="font-bold">{selectedTopics.length}{auth.user.user_feature_subscription.user_interest_count && `/${auth.user.user_feature_subscription.user_interest_count}`}</span>
                     </span>

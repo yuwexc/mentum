@@ -52,8 +52,8 @@ export const Following = ({ followings, className }: { followings: { list: Commu
     }, [isOpened]);
 
     return (
-        <article className={"w-full bg-white rounded-xl max-[920px]:p-4 " + className}>
-            <div className="flex items-center gap-3 pl-6 p-4 border-b border-gray-100 max-[920px]:p-0 max-[920px]:border-0">
+        <article className={"w-full bg-white rounded-xl " + className}>
+            <div className="flex items-center gap-3 p-4 border-b border-gray-100">
                 <UsersRound className="w-4 h-4 text-indigo-500" />
                 <h3 className="font-medium text-gray-800">Подписки</h3>
             </div>

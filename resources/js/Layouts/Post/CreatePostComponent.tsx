@@ -4,7 +4,6 @@ import { Form, FormControl, FormField, FormItem, FormMessage } from "../../Compo
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
-import { router } from "@inertiajs/react";
 import { Post } from "@/types/Post";
 import axios from "axios";
 import { toast } from "sonner";
